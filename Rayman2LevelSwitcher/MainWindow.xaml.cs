@@ -38,7 +38,7 @@ namespace Rayman2LevelSwitcher {
         {
             InitializeComponent();
             SetupKeyboardHooks();
-            chk_hotkeys.ToolTip = "Enables hotkeys:#R for random level#[ for previous level#] for next level#P to save position#O to load position".Replace("#", Environment.NewLine);
+            chk_hotkeys.ToolTip = "Enables hotkeys:#R for random level#K for previous level#L for next level#P to save position#O to load position".Replace("#", Environment.NewLine);
         }
 
         private void OnKeyPressed(object sender, GlobalKeyboardHookEventArgs e)
