@@ -24,5 +24,22 @@ namespace Rayman2LevelSwitcher {
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool WriteProcessMemory(int hProcess, int lpBaseAddress,
           byte[] lpBuffer, int dwSize, ref int lpNumberOfBytesWritten);
+
+        public static int GetPointerPath(int processHandle, int baseAddress, params int[] offsets)
+        {
+            int currentAddress = baseAddress;
+            int bytesReadOrWritten = 0;
+
+            byte[] buffer = new byte[4];
+            Memory.ReadProcessMemory((int)processHandle, currentAddress, buffer, buffer.Length, ref bytesReadOrWritten);
+            currentAddress = BitConverter.ToInt32(buffer, 0);
+
+            foreach (int offset in offsets) {
+                Memory.ReadProcessMemory((int)processHandle, currentAddress + offset, buffer, buffer.Length, ref bytesReadOrWritten);
+                currentAddress = BitConverter.ToInt32(buffer, 0);
+            }
+
+            return currentAddress;
+        }
     }
 }
