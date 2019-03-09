@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Rayman2LevelSwitcher"
         mc:Ignorable="d"
-        Title="R2 Level Switcher" Height="494.051" Width="320">
+        Title="R2 Level Switcher" Height="494.051" Width="379.667" MinHeight="494.051" MinWidth="379.667" Loaded="Window_Loaded">
     <Grid>
-        <TreeView x:Name="treeView_levels" Margin="10,57,10.2,9.8" MouseDoubleClick="treeView_levels_MouseDoubleClick">
+        <TreeView x:Name="treeView_levels" Margin="10,59,71,8" MouseDoubleClick="treeView_levels_MouseDoubleClick">
             <TreeViewItem Header="General/Extra">
                 <TreeViewItem x:Name="menu" Header="Menu" HorizontalAlignment="Left" Width="213"/>
                 <TreeViewItem x:Name="mapmonde" Header="The Hall of Doors" HorizontalAlignment="Left" Width="213"/>
@@ -120,13 +120,34 @@
             <TreeViewItem x:Name="rhop_10" Header="The Crow's Nest"></TreeViewItem>
         </TreeView>
         <Button x:Name="btn_switch" Content="Switch" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="70" Click="btn_Switch_Click"/>
-        <Button x:Name="btn_random" Content="Random" Margin="0,10,71.6,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="60" Click="btn_random_Click"/>
+        <Button x:Name="btn_random" Content="Random" Margin="0,10,132,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="60" Click="btn_random_Click"/>
         <Button x:Name="btn_reload" Content="Reload" Margin="85,10,0,0" VerticalAlignment="Top" Click="btn_Reload_Click" HorizontalAlignment="Left" Width="70"/>
         <Button x:Name="btn_savepos" Content="Save Pos" HorizontalAlignment="Left" Margin="10,34,0,0" VerticalAlignment="Top" Width="70" Click="btn_savepos_Click"/>
         <Button x:Name="btn_loadpos" Content="Load Pos" Margin="85,34,0,0" VerticalAlignment="Top" Click="btn_loadpos_Click" HorizontalAlignment="Left" Width="70"/>
-        <Button x:Name="btn_zerohp" Content="0hp" HorizontalAlignment="Right" Margin="0,34,71.6,0" VerticalAlignment="Top" Width="60" Click="btn_zerohp_Click"/>
-        <Button x:Name="btn_void" ToolTip="Press this while game is paused, then deathwarp for void (don't unpause)." Content="VOID" Margin="0,34,10.6,0" VerticalAlignment="Top" Click="btn_void_Click" HorizontalAlignment="Right" Width="56"/>
-        <CheckBox x:Name="chk_hotkeys" Content="Hotkeys" Margin="0,12,6.6,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="60"/>
+        <Button x:Name="btn_zerohp" Content="0hp" HorizontalAlignment="Right" Margin="0,34,132,0" VerticalAlignment="Top" Width="60" Click="btn_zerohp_Click"/>
+        <Button x:Name="btn_void" ToolTip="Press this while game is paused, then deathwarp for void (don't unpause)." Content="VOID" Margin="0,34,71,0" VerticalAlignment="Top" Click="btn_void_Click" HorizontalAlignment="Right" Width="56"/>
+        <CheckBox x:Name="chk_hotkeys" Content="Hotkeys" Margin="0,13,60,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="67"/>
+        <Expander x:Name="exp_bookmarkmenu" Header="Bookmarks" ExpandDirection="Right" Margin="0,13,-244,8" HorizontalAlignment="Right" Width="310" Collapsed="exp_bookmarkmenu_Collapsed" Expanded="exp_bookmarkmenu_Expanded">
+            <Grid>
+                <TextBlock Text="Bookmarks:" Margin="10,6,157,0" VerticalAlignment="Top" Height="16"/>
+                <TextBlock x:Name="txtblock_currentbookmarklevel" Text="No level is currently loaded" Margin="10,22,0,0" VerticalAlignment="Top" Height="18"/>
+
+                <Button x:Name="btn_loadbookmark" Content="Load Bookmark" Margin="10,45,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="96" Height="20" Click="btn_loadbookmark_Click"></Button>
+                <Button x:Name="btn_addbookmark" Content="Add Bookmark" Margin="10,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="87" Height="20" Click="btn_addbookmark_Click" IsEnabled="False"></Button>
+                <Button x:Name="btn_renamebookmark" Content="Rename" Margin="102,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="70" Height="20" Click="btn_renamebookmark_Click" IsEnabled="False"></Button>
+                <Button x:Name="btn_deletebookmark" Content="Delete" Margin="177,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="70" Height="20" Click="btn_deletebookmark_Click" IsEnabled="False"></Button>
+
+                <ListBox x:Name="listbox_bookmarklist" SelectionMode="Extended" Margin="10,70,0,25" MouseDoubleClick="listbox_bookmarklist_MouseDoubleClick" KeyDown="listbox_bookmarklist_KeyDown" ContextMenuOpening="listbox_bookmarklist_ContextMenuOpening" SelectionChanged="listbox_bookmarklist_SelectionChanged">
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem x:Name="contxtmenu_rename" Header="Rename" Click="contxtmenu_rename_Click"></MenuItem>
+                            <MenuItem x:Name="contxtmenu_delete" Header="Delete" Click="contxtmenu_delete_Click"></MenuItem>
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+                </ListBox>
+            </Grid>
+        </Expander>
+
 
     </Grid>
 </Window>
