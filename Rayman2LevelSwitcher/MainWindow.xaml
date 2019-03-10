@@ -133,13 +133,17 @@
                 <TextBlock x:Name="txtblock_currentbookmarklevel" Text="No level is currently loaded" Margin="10,22,0,0" VerticalAlignment="Top" Height="18"/>
 
                 <Button x:Name="btn_loadbookmark" Content="Load Bookmark" Margin="10,45,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="96" Height="20" Click="btn_loadbookmark_Click"></Button>
-                <Button x:Name="btn_addbookmark" Content="Add Bookmark" Margin="10,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="87" Height="20" Click="btn_addbookmark_Click" IsEnabled="False"></Button>
+                <Button x:Name="btn_moveup" Content="🡡" Margin="202,45,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="20" Height="20" Padding="0,0,0,0" IsEnabled="False" Click="btn_moveup_Click" ></Button>
+                <Button x:Name="btn_movedown" Content="🡣" Margin="227,45,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="20" Height="20" Padding="0,0,0,0" IsEnabled="False" Click="btn_movedown_Click"></Button>
+                <Button x:Name="btn_addbookmark" Content="Add Bookmark" Margin="10,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="87" Height="20" Click="btn_addbookmark_Click"></Button>
                 <Button x:Name="btn_renamebookmark" Content="Rename" Margin="102,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="70" Height="20" Click="btn_renamebookmark_Click" IsEnabled="False"></Button>
                 <Button x:Name="btn_deletebookmark" Content="Delete" Margin="177,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="70" Height="20" Click="btn_deletebookmark_Click" IsEnabled="False"></Button>
 
                 <ListBox x:Name="listbox_bookmarklist" SelectionMode="Extended" Margin="10,70,0,25" MouseDoubleClick="listbox_bookmarklist_MouseDoubleClick" KeyDown="listbox_bookmarklist_KeyDown" ContextMenuOpening="listbox_bookmarklist_ContextMenuOpening" SelectionChanged="listbox_bookmarklist_SelectionChanged">
                     <ListBox.ContextMenu>
                         <ContextMenu>
+                            <MenuItem x:Name="contxtmenu_moveup" Header="Move Up" Click="contxtmenu_moveup_Click"></MenuItem>
+                            <MenuItem x:Name="contxtmenu_movedown" Header="Move Down" Click="contxtmenu_movedown_Click"></MenuItem>
                             <MenuItem x:Name="contxtmenu_rename" Header="Rename" Click="contxtmenu_rename_Click"></MenuItem>
                             <MenuItem x:Name="contxtmenu_delete" Header="Delete" Click="contxtmenu_delete_Click"></MenuItem>
                         </ContextMenu>

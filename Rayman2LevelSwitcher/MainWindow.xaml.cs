@@ -58,10 +58,6 @@ namespace Rayman2LevelSwitcher {
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!File.Exists(bookmarkFile))
-            {
-                CreateBookmarkFile();
-            }
             bgThread = new Thread(BookmarkUpdater);
             bgThread.IsBackground = true;
             bgThread.Start();
@@ -373,6 +369,13 @@ namespace Rayman2LevelSwitcher {
             int processHandle = GetRayman2ProcessHandle();
             if (processHandle < 0) { return; }
 
+            string levelname = GetCurrentLevelName(processHandle);
+
+            if (cutscenesAndExtras.Contains(levelname) || String.IsNullOrEmpty(levelname))
+            {
+                return;
+            }
+
             int bytesReadOrWritten = 0;
             int off_xcoord = Memory.GetPointerPath((int)processHandle, 0x500560, 0x224, 0x310, 0x34, 0x0) + 0x1ac;
             int off_ycoord = off_xcoord + 4;
@@ -384,9 +387,6 @@ namespace Rayman2LevelSwitcher {
             Memory.ReadProcessMemory(processHandle, off_xcoord, xCoordBuffer, 4, ref bytesReadOrWritten);
             Memory.ReadProcessMemory(processHandle, off_ycoord, yCoordBuffer, 4, ref bytesReadOrWritten);
             Memory.ReadProcessMemory(processHandle, off_zcoord, zCoordBuffer, 4, ref bytesReadOrWritten);
-
-
-            string levelname = GetCurrentLevelName(processHandle);
 
             if (!File.Exists(bookmarkFile)) { CreateBookmarkFile(); }
 
@@ -428,7 +428,7 @@ namespace Rayman2LevelSwitcher {
             int processHandle = GetRayman2ProcessHandle(false);
             if (processHandle < 0)
             {
-                btn_addbookmark.IsEnabled = false;
+                txtblock_currentbookmarklevel.Text = "No level is currently loaded";
                 listbox_bookmarklist.Items.Clear();
                 return;
             }
@@ -436,7 +436,6 @@ namespace Rayman2LevelSwitcher {
             if (!File.Exists(bookmarkFile))
             {
                 listbox_bookmarklist.Items.Clear();
-                return;
             }
 
             string levelname = GetCurrentLevelName(processHandle);
@@ -452,13 +451,19 @@ namespace Rayman2LevelSwitcher {
             {
                 txtblock_currentbookmarklevel.Text = "No level is currently loaded";
                 listbox_bookmarklist.Items.Clear();
-                btn_addbookmark.IsEnabled = false;
                 return;
             }
-            btn_addbookmark.IsEnabled = true;
+
             txtblock_currentbookmarklevel.Text = realLevelNames.ElementAt(Array.FindIndex(allLevels, row => row.ToLower().Contains(levelname.ToLower())));
-            var xml = XDocument.Load(bookmarkFile);
             listbox_bookmarklist.Items.Clear();
+
+            if (!File.Exists(bookmarkFile))
+            {
+                return;
+            }
+
+            var xml = XDocument.Load(bookmarkFile);
+
 
             if (xml.Element("Rayman2LevelBookmarks").Elements(levelname).Count() == 0)
             {
@@ -572,6 +577,92 @@ namespace Rayman2LevelSwitcher {
             listbox_bookmarklist.Focus();
         }
 
+        private void MoveBookmarkUp()
+        {
+            int processHandle = GetRayman2ProcessHandle(false);
+            if (processHandle < 0 || !File.Exists(bookmarkFile) || listbox_bookmarklist.SelectedItem == null)
+            {
+                return;
+            }
+
+            string levelname = GetCurrentLevelName(processHandle);
+
+            var xml = XDocument.Load(bookmarkFile);
+
+            XElement currentBookmark = xml.Element("Rayman2LevelBookmarks");
+
+            foreach (XElement bookmark in xml.Element("Rayman2LevelBookmarks").Element(levelname).Elements("Bookmark"))
+            {
+                if (bookmark.Element("Name").Value == listbox_bookmarklist.SelectedItem.ToString())
+                {
+                    currentBookmark = bookmark;
+                }
+            }
+            if (currentBookmark == xml.Element("Rayman2LevelBookmarks"))
+            {
+                return;
+            }
+
+            XNode previousBookmark = currentBookmark.PreviousNode;
+            while (previousBookmark != null && !(previousBookmark is XElement))
+            {
+                previousBookmark = previousBookmark.PreviousNode;
+            }
+            if (previousBookmark == null)
+            {
+                return;
+            }
+            currentBookmark.Remove();
+            previousBookmark.AddBeforeSelf(currentBookmark);
+            xml.Save(bookmarkFile);
+            int selectedIndex = listbox_bookmarklist.SelectedIndex - 1;
+            UpdateBookmarks(true);
+            listbox_bookmarklist.SelectedIndex = selectedIndex;
+        }
+
+        private void MoveBookmarkDown()
+        {
+            int processHandle = GetRayman2ProcessHandle(false);
+            if (processHandle < 0 || !File.Exists(bookmarkFile) || listbox_bookmarklist.SelectedItem == null)
+            {
+                return;
+            }
+
+            string levelname = GetCurrentLevelName(processHandle);
+
+            var xml = XDocument.Load(bookmarkFile);
+
+            XElement currentBookmark = xml.Element("Rayman2LevelBookmarks");
+
+            foreach (XElement bookmark in xml.Element("Rayman2LevelBookmarks").Element(levelname).Elements("Bookmark"))
+            {
+                if (bookmark.Element("Name").Value == listbox_bookmarklist.SelectedItem.ToString())
+                {
+                    currentBookmark = bookmark;
+                }
+            }
+            if (currentBookmark == xml.Element("Rayman2LevelBookmarks"))
+            {
+                return;
+            }
+
+            XNode nextBookmark = currentBookmark.NextNode;
+            while (nextBookmark != null && !(nextBookmark is XElement))
+            {
+                nextBookmark = nextBookmark.NextNode;
+            }
+            if (nextBookmark == null)
+            {
+                return;
+            }
+            currentBookmark.Remove();
+            nextBookmark.AddAfterSelf(currentBookmark);
+            xml.Save(bookmarkFile);
+            int selectedIndex = listbox_bookmarklist.SelectedIndex + 1;
+            UpdateBookmarks(true);
+            listbox_bookmarklist.SelectedIndex = selectedIndex;
+        }
+
         private void btn_loadbookmark_Click(object sender, RoutedEventArgs e)
         {
             LoadBookmark();
@@ -592,12 +683,32 @@ namespace Rayman2LevelSwitcher {
             DeleteBookmark();
         }
 
+        private void btn_moveup_Click(object sender, RoutedEventArgs e)
+        {
+            MoveBookmarkUp();
+        }
+
+        private void btn_movedown_Click(object sender, RoutedEventArgs e)
+        {
+            MoveBookmarkDown();
+        }
+
         private void listbox_bookmarklist_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (listbox_bookmarklist.SelectedItem != null)
             {
                 LoadBookmark();
             }
+        }
+
+        private void contxtmenu_moveup_Click(object sender, RoutedEventArgs e)
+        {
+            MoveBookmarkUp();
+        }
+
+        private void contxtmenu_movedown_Click(object sender, RoutedEventArgs e)
+        {
+            MoveBookmarkDown();
         }
 
         private void contxtmenu_rename_Click(object sender, RoutedEventArgs e)
@@ -633,16 +744,51 @@ namespace Rayman2LevelSwitcher {
 
         private void listbox_bookmarklist_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (listbox_bookmarklist.SelectedIndex != 0 && listbox_bookmarklist.SelectedIndex != listbox_bookmarklist.Items.Count - 1 && listbox_bookmarklist.SelectedItem != null)
+            {
+                btn_moveup.IsEnabled = true;
+                btn_movedown.IsEnabled = true;
+            }
+
+            else if (listbox_bookmarklist.SelectedIndex == 0 && listbox_bookmarklist.Items.Count > 1)
+            {
+                btn_moveup.IsEnabled = false;
+                btn_movedown.IsEnabled = true;
+            }
+
+            else if (listbox_bookmarklist.SelectedIndex == listbox_bookmarklist.Items.Count - 1 && listbox_bookmarklist.Items.Count > 1)
+            {
+                btn_moveup.IsEnabled = true;
+                btn_movedown.IsEnabled = false;
+            }
+
+            else
+            {
+                btn_moveup.IsEnabled = false;
+                btn_movedown.IsEnabled = false;
+            }
+
             if (listbox_bookmarklist.SelectedItem == null)
             {
                 btn_renamebookmark.IsEnabled = false;
                 btn_deletebookmark.IsEnabled = false;
+                btn_moveup.IsEnabled = false;
+                btn_movedown.IsEnabled = false;
             }
+
+            else if (listbox_bookmarklist.SelectedItems.Count > 1)
+            {
+                btn_renamebookmark.IsEnabled = false;
+                btn_moveup.IsEnabled = false;
+                btn_movedown.IsEnabled = false;
+            }
+
             else
             {
                 btn_renamebookmark.IsEnabled = true;
                 btn_deletebookmark.IsEnabled = true;
             }
+
         }
     }
 }
