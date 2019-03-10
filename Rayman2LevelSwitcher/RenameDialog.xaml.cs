@@ -38,6 +38,7 @@ namespace Rayman2LevelSwitcher
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             txtbox_name.Focus();
+            txtbox_name.SelectAll();
         }
 
         private void txtbox_name_KeyDown(object sender, KeyEventArgs e)

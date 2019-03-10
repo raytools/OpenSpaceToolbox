@@ -122,11 +122,13 @@ namespace Rayman2LevelSwitcher {
         private void LoadNextLevel()
         {
             LoadOffsetLevel(1);
+            UpdateBookmarks(true);
         }
 
         private void LoadPreviousLevel()
         {
             LoadOffsetLevel(-1);
+            UpdateBookmarks(true);
         }
 
         private string GetCurrentLevelName(int processHandle)
@@ -205,6 +207,7 @@ namespace Rayman2LevelSwitcher {
         private void btn_Reload_Click(object sender, RoutedEventArgs e)
         {
             RefreshLevel();
+            UpdateBookmarks(true);
         }
 
         private void RefreshLevel()
@@ -369,7 +372,7 @@ namespace Rayman2LevelSwitcher {
             int processHandle = GetRayman2ProcessHandle();
             if (processHandle < 0) { return; }
 
-            string levelname = GetCurrentLevelName(processHandle);
+            string levelname = GetCurrentLevelName(processHandle).ToLower();
 
             if (cutscenesAndExtras.Contains(levelname) || String.IsNullOrEmpty(levelname))
             {
@@ -387,6 +390,10 @@ namespace Rayman2LevelSwitcher {
             Memory.ReadProcessMemory(processHandle, off_xcoord, xCoordBuffer, 4, ref bytesReadOrWritten);
             Memory.ReadProcessMemory(processHandle, off_ycoord, yCoordBuffer, 4, ref bytesReadOrWritten);
             Memory.ReadProcessMemory(processHandle, off_zcoord, zCoordBuffer, 4, ref bytesReadOrWritten);
+
+            savedXCoord = BitConverter.ToSingle(xCoordBuffer, 0);
+            savedYCoord = BitConverter.ToSingle(yCoordBuffer, 0);
+            savedZCoord = BitConverter.ToSingle(zCoordBuffer, 0);
 
             if (!File.Exists(bookmarkFile)) { CreateBookmarkFile(); }
 
@@ -438,7 +445,7 @@ namespace Rayman2LevelSwitcher {
                 listbox_bookmarklist.Items.Clear();
             }
 
-            string levelname = GetCurrentLevelName(processHandle);
+            string levelname = GetCurrentLevelName(processHandle).ToLower();
 
             if (levelname == bookmarkCurrentLevel && !forceUpdate || String.IsNullOrEmpty(levelname))
             {
@@ -484,7 +491,7 @@ namespace Rayman2LevelSwitcher {
                 return;
             }
 
-            string levelname = GetCurrentLevelName(processHandle);
+            string levelname = GetCurrentLevelName(processHandle).ToLower();
 
             var xml = XDocument.Load(bookmarkFile);
 
@@ -504,21 +511,24 @@ namespace Rayman2LevelSwitcher {
         private void RenameBookmark()
         {
             renameBookmarkName = "";
+            bool hotkeysIsChecked = chk_hotkeys.IsChecked ?? true;
             int processHandle = GetRayman2ProcessHandle(false);
             if (processHandle < 0 || !File.Exists(bookmarkFile) || listbox_bookmarklist.SelectedItem == null || listbox_bookmarklist.SelectedItems.Count > 1)
             {
                 return;
             }
 
-            string levelname = GetCurrentLevelName(processHandle);
+            string levelname = GetCurrentLevelName(processHandle).ToLower();
 
             int selectedIndex = listbox_bookmarklist.SelectedIndex;
 
             RenameDialog rename = new RenameDialog();
             rename.Left = Application.Current.MainWindow.Left + (Application.Current.MainWindow.Width / 2) - (rename.Width / 2);
             rename.Top = Application.Current.MainWindow.Top + (Application.Current.MainWindow.Height / 2) - (rename.Height / 2);
+            rename.txtbox_name.Text = listbox_bookmarklist.SelectedItem.ToString();
+            chk_hotkeys.IsChecked = false;
             rename.ShowDialog();
-
+            chk_hotkeys.IsChecked = hotkeysIsChecked;
             if (!String.IsNullOrEmpty(renameBookmarkName) && listbox_bookmarklist.SelectedItem.ToString() != renameBookmarkName)
             {
                 var xml = XDocument.Load(bookmarkFile);
@@ -553,7 +563,7 @@ namespace Rayman2LevelSwitcher {
                 return;
             }
 
-            string levelname = GetCurrentLevelName(processHandle);
+            string levelname = GetCurrentLevelName(processHandle).ToLower();
             var xml = XDocument.Load(bookmarkFile);
 
             nextfile:
@@ -585,7 +595,7 @@ namespace Rayman2LevelSwitcher {
                 return;
             }
 
-            string levelname = GetCurrentLevelName(processHandle);
+            string levelname = GetCurrentLevelName(processHandle).ToLower();
 
             var xml = XDocument.Load(bookmarkFile);
 
@@ -628,7 +638,7 @@ namespace Rayman2LevelSwitcher {
                 return;
             }
 
-            string levelname = GetCurrentLevelName(processHandle);
+            string levelname = GetCurrentLevelName(processHandle).ToLower();
 
             var xml = XDocument.Load(bookmarkFile);
 
