@@ -460,8 +460,24 @@ namespace Rayman2LevelSwitcher {
                 listbox_bookmarklist.Items.Clear();
                 return;
             }
+            try
+            {
+                int indexOfSubLevel = levelname.IndexOf('$');
+                if (indexOfSubLevel > 0)
+                {
+                    txtblock_currentbookmarklevel.Text = realLevelNames.ElementAt(Array.FindIndex(allLevels, row => row.ToLower().Contains(levelname.ToLower().Substring(0, indexOfSubLevel))));
+                }
 
-            txtblock_currentbookmarklevel.Text = realLevelNames.ElementAt(Array.FindIndex(allLevels, row => row.ToLower().Contains(levelname.ToLower())));
+                else
+                {
+                    txtblock_currentbookmarklevel.Text = realLevelNames.ElementAt(Array.FindIndex(allLevels, row => row.ToLower().Contains(levelname.ToLower())));
+                }
+            }
+
+            catch (System.ArgumentOutOfRangeException)
+            {
+                txtblock_currentbookmarklevel.Text = levelname;
+            }
             listbox_bookmarklist.Items.Clear();
 
             if (!File.Exists(bookmarkFile))
