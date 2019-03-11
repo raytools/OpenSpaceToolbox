@@ -373,6 +373,11 @@ namespace Rayman2LevelSwitcher {
             if (processHandle < 0) { return; }
 
             string levelname = GetCurrentLevelName(processHandle).ToLower();
+            int indexOfSubLevel = levelname.IndexOf('$');
+            if (indexOfSubLevel > 0)
+            {
+                levelname = levelname.ToLower().Substring(0, indexOfSubLevel);
+            }
 
             if (cutscenesAndExtras.Contains(levelname) || String.IsNullOrEmpty(levelname))
             {
@@ -446,6 +451,11 @@ namespace Rayman2LevelSwitcher {
             }
 
             string levelname = GetCurrentLevelName(processHandle).ToLower();
+            int indexOfSubLevel = levelname.IndexOf('$');
+            if (indexOfSubLevel > 0)
+            {
+                levelname = levelname.ToLower().Substring(0, indexOfSubLevel);
+            }
 
             if (levelname == bookmarkCurrentLevel && !forceUpdate || String.IsNullOrEmpty(levelname))
             {
@@ -462,21 +472,12 @@ namespace Rayman2LevelSwitcher {
             }
             try
             {
-                int indexOfSubLevel = levelname.IndexOf('$');
-                if (indexOfSubLevel > 0)
-                {
-                    txtblock_currentbookmarklevel.Text = realLevelNames.ElementAt(Array.FindIndex(allLevels, row => row.ToLower().Contains(levelname.ToLower().Substring(0, indexOfSubLevel))));
-                }
-
-                else
-                {
-                    txtblock_currentbookmarklevel.Text = realLevelNames.ElementAt(Array.FindIndex(allLevels, row => row.ToLower().Contains(levelname.ToLower())));
-                }
+                txtblock_currentbookmarklevel.Text = realLevelNames.ElementAt(Array.FindIndex(allLevels, row => row.ToLower().Contains(levelname.ToLower())));
             }
 
             catch (System.ArgumentOutOfRangeException)
             {
-                txtblock_currentbookmarklevel.Text = levelname;
+                txtblock_currentbookmarklevel.Text = "Level loaded incorrectly! Wrong bookmarks will be shown";
             }
             listbox_bookmarklist.Items.Clear();
 
@@ -508,6 +509,11 @@ namespace Rayman2LevelSwitcher {
             }
 
             string levelname = GetCurrentLevelName(processHandle).ToLower();
+            int indexOfSubLevel = levelname.IndexOf('$');
+            if (indexOfSubLevel > 0)
+            {
+                levelname = levelname.ToLower().Substring(0, indexOfSubLevel);
+            }
 
             var xml = XDocument.Load(bookmarkFile);
 
@@ -535,6 +541,11 @@ namespace Rayman2LevelSwitcher {
             }
 
             string levelname = GetCurrentLevelName(processHandle).ToLower();
+            int indexOfSubLevel = levelname.IndexOf('$');
+            if (indexOfSubLevel > 0)
+            {
+                levelname = levelname.ToLower().Substring(0, indexOfSubLevel);
+            }
 
             int selectedIndex = listbox_bookmarklist.SelectedIndex;
 
@@ -580,6 +591,11 @@ namespace Rayman2LevelSwitcher {
             }
 
             string levelname = GetCurrentLevelName(processHandle).ToLower();
+            int indexOfSubLevel = levelname.IndexOf('$');
+            if (indexOfSubLevel > 0)
+            {
+                levelname = levelname.ToLower().Substring(0, indexOfSubLevel);
+            }
             var xml = XDocument.Load(bookmarkFile);
 
             nextfile:
@@ -612,6 +628,11 @@ namespace Rayman2LevelSwitcher {
             }
 
             string levelname = GetCurrentLevelName(processHandle).ToLower();
+            int indexOfSubLevel = levelname.IndexOf('$');
+            if (indexOfSubLevel > 0)
+            {
+                levelname = levelname.ToLower().Substring(0, indexOfSubLevel);
+            }
 
             var xml = XDocument.Load(bookmarkFile);
 
@@ -655,6 +676,11 @@ namespace Rayman2LevelSwitcher {
             }
 
             string levelname = GetCurrentLevelName(processHandle).ToLower();
+            int indexOfSubLevel = levelname.IndexOf('$');
+            if (indexOfSubLevel > 0)
+            {
+                levelname = levelname.ToLower().Substring(0, indexOfSubLevel);
+            }
 
             var xml = XDocument.Load(bookmarkFile);
 
