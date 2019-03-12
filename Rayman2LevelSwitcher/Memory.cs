@@ -25,6 +25,12 @@ namespace Rayman2LevelSwitcher {
         public static extern bool WriteProcessMemory(int hProcess, int lpBaseAddress,
           byte[] lpBuffer, int dwSize, ref int lpNumberOfBytesWritten);
 
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        public static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+
         public static int GetPointerPath(int processHandle, int baseAddress, params int[] offsets)
         {
             int currentAddress = baseAddress;

@@ -49,6 +49,8 @@ namespace Rayman2LevelSwitcher {
 
         Thread bgThread;
 
+        bool hotkeysEnabled = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -70,15 +72,63 @@ namespace Rayman2LevelSwitcher {
                 //Update bookmarks every second
                 Dispatcher.Invoke(DispatcherPriority.Normal,
                     new Action(() => UpdateBookmarks() ));
+                //Dispatcher.Invoke(DispatcherPriority.Normal,
+                //    new Action(() => txtblock_currentbookmarklevel.Text = Rayman2Handle()));
+                //Dispatcher.Invoke(DispatcherPriority.Normal,
+                //    new Action(() => txtblock_currentbookmarklevel.Text += " " + Memory.GetForegroundWindow().ToString()));
                 Thread.Sleep(1000);
             }
+        }
+
+        private bool Rayman2IsFocused()
+        {
+            const int nChars = 256;
+            StringBuilder Buff = new StringBuilder(nChars);
+            IntPtr handle = Memory.GetForegroundWindow();
+
+            if (Memory.GetWindowText(handle, Buff, nChars) > 0)
+            {
+                if (Buff.ToString() == "Rayman II")
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool Rayman2IsPaused()
+        {
+            int processHandle = GetRayman2ProcessHandle(false);
+            if (processHandle < 0) { return false; }
+
+            int bytesReadOrWritten = 0;
+
+            byte[] pausePointerBuffer = new byte[4];
+
+            Memory.ReadProcessMemory((int)processHandle, off_voidpointer, pausePointerBuffer, pausePointerBuffer.Length, ref bytesReadOrWritten);
+
+            if (BitConverter.ToInt32(pausePointerBuffer, 0) == 1)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private void chk_hotkeys_Checked(object sender, RoutedEventArgs e)
+        {
+            hotkeysEnabled = true;
+        }
+
+        private void chk_hotkeys_Unchecked(object sender, RoutedEventArgs e)
+        {
+            hotkeysEnabled = false;
         }
 
         private void OnKeyPressed(object sender, GlobalKeyboardHookEventArgs e)
         {
             //Debug.WriteLine(e.KeyboardData.VirtualCode);
                         
-            if (!chk_hotkeys.IsChecked.Value) {
+            if (!hotkeysEnabled || Rayman2IsPaused() || !Rayman2IsFocused() && !Application.Current.MainWindow.IsActive) {
                 e.Handled = false;
                 return;
             }
@@ -533,7 +583,7 @@ namespace Rayman2LevelSwitcher {
         private void RenameBookmark()
         {
             renameBookmarkName = "";
-            bool hotkeysIsChecked = chk_hotkeys.IsChecked ?? true;
+            bool hotkeysIsChecked = hotkeysEnabled;
             int processHandle = GetRayman2ProcessHandle(false);
             if (processHandle < 0 || !File.Exists(bookmarkFile) || listbox_bookmarklist.SelectedItem == null || listbox_bookmarklist.SelectedItems.Count > 1)
             {
@@ -553,9 +603,9 @@ namespace Rayman2LevelSwitcher {
             rename.Left = Application.Current.MainWindow.Left + (Application.Current.MainWindow.Width / 2) - (rename.Width / 2);
             rename.Top = Application.Current.MainWindow.Top + (Application.Current.MainWindow.Height / 2) - (rename.Height / 2);
             rename.txtbox_name.Text = listbox_bookmarklist.SelectedItem.ToString();
-            chk_hotkeys.IsChecked = false;
+            hotkeysEnabled = false;
             rename.ShowDialog();
-            chk_hotkeys.IsChecked = hotkeysIsChecked;
+            hotkeysEnabled = hotkeysIsChecked;
             if (!String.IsNullOrEmpty(renameBookmarkName) && listbox_bookmarklist.SelectedItem.ToString() != renameBookmarkName)
             {
                 var xml = XDocument.Load(bookmarkFile);
