@@ -103,41 +103,44 @@ namespace Rayman2LevelSwitcher
             get => _currentLevel;
             set
             {
-                if (_currentLevel == value)
-                    return;
-
-                // Reorder to match UI order
-                foreach (var item in BookmarkItems)
+                lock (this)
                 {
-                    AllBookmarkItems.Remove(item);
-                    AllBookmarkItems.Add(item);
+                    if (_currentLevel == value)
+                        return;
+
+                    // Reorder to match UI order
+                    foreach (var item in BookmarkItems)
+                    {
+                        AllBookmarkItems.Remove(item);
+                        AllBookmarkItems.Add(item);
+                    }
+
+                    BookmarkItems.Clear();
+
+                    foreach (var item in AllBookmarkItems.Where(x => String.Equals(x.Level, value, StringComparison.InvariantCultureIgnoreCase)))
+                        BookmarkItems.Add(item);
+
+                    _currentLevel = value;
+
+                    // Get the level and container
+                    var lvl = App.Levels.ToList().Find(x => String.Equals(x.FileName, value, StringComparison.InvariantCultureIgnoreCase));
+
+                    if (lvl == null)
+                    {
+                        CurrentLevelName = $"N/A";
+                        return;
+                    }
+
+                    var container = App.LevelContainers.ToList().Find(x => x.Levels.Contains(lvl));
+
+                    if (container == null)
+                    {
+                        CurrentLevelName = $"N/A";
+                        return;
+                    }
+
+                    CurrentLevelName = $"{container.Name} - {lvl.Name}";
                 }
-
-                BookmarkItems.Clear();
-
-                foreach (var item in AllBookmarkItems.Where(x => String.Equals(x.Level, value, StringComparison.InvariantCultureIgnoreCase)))
-                    BookmarkItems.Add(item);
-
-                _currentLevel = value;
-
-                // Get the level and container
-                var lvl = App.Levels.ToList().Find(x => String.Equals(x.FileName, value, StringComparison.InvariantCultureIgnoreCase));
-
-                if (lvl == null)
-                {
-                    CurrentLevelName = $"N/A";
-                    return;
-                }
-
-                var container = App.LevelContainers.ToList().Find(x => x.Levels.Contains(lvl));
-
-                if (container == null)
-                {
-                    CurrentLevelName = $"N/A";
-                    return;
-                }
-
-                CurrentLevelName = $"{container.Name} - {lvl.Name}";
             }
         }
 
@@ -183,12 +186,12 @@ namespace Rayman2LevelSwitcher
         {
             await Task.Run(async () =>
             {
+                var manager = new Rayman2Manager();
+
                 while (true)
                 {
                     try
                     {
-                        var manager = new Rayman2Manager();
-
                         int processHandle = manager.GetRayman2ProcessHandle(false);
 
                         if (processHandle >= 0)
@@ -207,7 +210,7 @@ namespace Rayman2LevelSwitcher
                             CurrentLevel = String.Empty;
                         }
 
-                        await Task.Delay(2000);
+                        await Task.Delay(1500);
                     }
                     catch (Exception ex)
                     {
@@ -233,8 +236,8 @@ namespace Rayman2LevelSwitcher
             if (SelectedBookmark == null)
                 return;
 
-            BookmarkItems.Remove(SelectedBookmark);
             AllBookmarkItems.Remove(SelectedBookmark);
+            BookmarkItems.Remove(SelectedBookmark);
         }
 
         /// <summary>

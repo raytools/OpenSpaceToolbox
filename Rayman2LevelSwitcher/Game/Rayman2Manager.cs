@@ -67,6 +67,8 @@ namespace Rayman2LevelSwitcher
 
             IntPtr processHandle = Memory.OpenProcess(Memory.PROCESS_WM_READ | Memory.PROCESS_VM_WRITE | Memory.PROCESS_VM_OPERATION, false, process.Id);
 
+            process.Dispose();
+
             return (int)processHandle;
         }
 
