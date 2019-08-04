@@ -33,17 +33,22 @@ namespace Rayman2LevelSwitcher
 
         #endregion
 
-        #region Private Properties
-
-        private float SavedXPosition { get; set; }
-
-        private float SavedYPosition { get; set; }
-
-        private float SavedZPosition { get; set; }
-
-        #endregion
-
         #region Public Properties
+
+        /// <summary>
+        /// The saved X position
+        /// </summary>
+        public float SavedXPosition { get; set; }
+
+        /// <summary>
+        /// The saved Y position
+        /// </summary>
+        public float SavedYPosition { get; set; }
+
+        /// <summary>
+        /// The saved Z position
+        /// </summary>
+        public float SavedZPosition { get; set; }
 
         /// <summary>
         /// The random generator for this view model

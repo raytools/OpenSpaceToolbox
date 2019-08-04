@@ -6,53 +6,33 @@
         xmlns:local="clr-namespace:Rayman2LevelSwitcher"
         xmlns:dd="urn:gong-wpf-dragdrop"
         mc:Ignorable="d"
-        Title="Rayman 2 - Level Switcher (2.0.0)"
-        Height="300"
-        Width="400"
+        Title="Rayman 2 - Level Switcher"
+        Height="480"
+        Width="640"
+        MinHeight="250"
+        MinWidth="250"
         Closing="MainWindow_OnClosing"
         d:DataContext="{d:DesignInstance local:GameManagerViewModel}">
-    <StackPanel>
-        <Menu>
+    <Window.Resources>
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Padding" Value="5 2" />
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <Menu Grid.Row="0">
             <MenuItem Header="File">
                 <MenuItem Header="Exit"
                           InputGestureText="Alt+F4"
                           Command="{x:Static local:CommonCommands.CloseAppCommand}" />
             </MenuItem>
 
-            <MenuItem Header="Levels"
-                      ItemsSource="{Binding Path=App.LevelContainers, Mode=OneTime}">
-                <MenuItem.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Path=Levels, Mode=OneTime}">
-                        <TextBlock Text="{Binding Path=Name, Mode=OneTime}" />
-                    </HierarchicalDataTemplate>
-                </MenuItem.ItemTemplate>
-                <MenuItem.ItemContainerStyle>
-                    <Style TargetType="MenuItem">
-                        <Setter Property="Command" Value="{Binding Path=LoadLevelCommand, Mode=OneTime}" />
-                    </Style>
-                </MenuItem.ItemContainerStyle>
-            </MenuItem>
-
             <MenuItem Header="Mods">
-
-                <MenuItem Header="Reload level"
-                          Command="{Binding Path=ReloadLevelCommand}" />
-
-                <MenuItem Header="Random level"
-                          Command="{Binding Path=LoadRandomLevelCommand}"
-                          InputGestureText="R"/>
-
-                <Separator />
-
-                <MenuItem Header="Save position"
-                          Command="{Binding Path=SavePositionCommand}"
-                          InputGestureText="P"/>
-
-                <MenuItem Header="Load position"
-                          Command="{Binding Path=LoadSavedPositionCommand}" 
-                          InputGestureText="O"/>
-
-                <Separator />
 
                 <MenuItem Header="Void"
                           Command="{Binding Path=ActivateVoidCommand}" />
@@ -71,26 +51,131 @@
 
         </Menu>
 
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <StackPanel x:Name="BookmarkPanel"
-                        Margin="10" d:DataContext="{d:DesignInstance local:BookmarksViewModel}">
+        <Grid Grid.Row="1"
+              Grid.IsSharedSizeScope="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="50" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition MinWidth="50"/>
+            </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Bookmarks"
+            <Grid Grid.Column="0"
+                  Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" 
+                                   SharedSizeGroup="Bottom"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0"
+                           Text="Levels"
                            HorizontalAlignment="Center"
                            FontWeight="Bold"
                            FontSize="14" />
 
-                <Button Content="Add Bookmark"
-                        HorizontalAlignment="Left"
-                        Command="{Binding Path=AddBookmarkCommand}"
-                        Margin="0 10" />
+                <TreeView Grid.Row="1"
+                          ItemsSource="{Binding Path=App.LevelContainers, Mode=OneTime}"
+                          VerticalAlignment="Stretch"
+                          Margin="0 10">
 
-                <ListBox ItemsSource="{Binding Path=BookmarkItems}"
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Path=Levels, Mode=OneTime}">
+                            <TextBlock Text="{Binding Path=Name, Mode=OneTime}" 
+                                       TextWrapping="WrapWithOverflow"/>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="TreeViewItem">
+                            <EventSetter Event="MouseDoubleClick" Handler="TreeViewItem_MouseDoubleClick" />
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+
+                </TreeView>
+
+                <StackPanel Grid.Row="2">
+
+                    <WrapPanel Orientation="Horizontal"
+                               Margin="0 5">
+
+                        <Button Content="Reload level"
+                                Command="{Binding Path=ReloadLevelCommand}"
+                                Margin="0 0 10 0"/>
+
+                        <Button Content="Random level"
+                                Command="{Binding Path=LoadRandomLevelCommand}"/>
+
+                    </WrapPanel>
+
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0 5">
+
+                        <StackPanel>
+
+                            <Button Content="Save pos"
+                                    Command="{Binding Path=SavePositionCommand}"
+                                    Margin="0 0 0 5"/>
+
+                            <Button Content="Load pos"
+                                    Command="{Binding Path=LoadSavedPositionCommand}"/>
+
+                        </StackPanel>
+
+                        <StackPanel Margin="10 0 0 0"
+                                    VerticalAlignment="Center">
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="X: " />
+                                <TextBlock Text="{Binding Path=SavedXPosition}" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Y: " />
+                                <TextBlock Text="{Binding Path=SavedYPosition}" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Z: " />
+                                <TextBlock Text="{Binding Path=SavedZPosition}" />
+                            </StackPanel>
+
+                        </StackPanel>
+
+                    </StackPanel>
+
+                </StackPanel>
+
+            </Grid>
+
+            <GridSplitter Grid.Column="1"
+                          ResizeDirection="Columns"
+                          ResizeBehavior="PreviousAndNext"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch" />
+
+            <Grid x:Name="BookmarkPanel"
+                  Grid.Column="2"
+                  Margin="10"
+                  d:DataContext="{d:DesignInstance local:BookmarksViewModel}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto"
+                                   SharedSizeGroup="Bottom" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0"
+                           Text="Bookmarks"
+                           HorizontalAlignment="Center"
+                           FontWeight="Bold"
+                           FontSize="14" />
+
+                <ListBox Grid.Row="1"
+                         ItemsSource="{Binding Path=BookmarkItems}"
                          SelectedIndex="{Binding Path=SelectedBookmarkIndex}"
                          dd:DragDrop.IsDragSource="true"
                          dd:DragDrop.IsDropTarget="true"
-                         MinHeight="100"
-                         MaxHeight="200"
                          Margin="0 10">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -109,28 +194,43 @@
                     </ListBox.InputBindings>
                 </ListBox>
 
-                <WrapPanel Orientation="Horizontal"
-                           IsEnabled="{Binding Path=SelectedBookmarkIndex, Converter={local:IsValidIndexConverter}}"
-                           Margin="0 10">
-                    <WrapPanel.Resources>
-                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-                            <Setter Property="Margin" Value="0 0 10 0" />
-                            <Setter Property="Padding" Value="5 2" />
-                        </Style>
-                    </WrapPanel.Resources>
+                <StackPanel Grid.Row="2">
+                    
+                    <WrapPanel Orientation="Horizontal">
 
-                    <Button Content="Load Bookmark"
-                            Command="{Binding Path=LoadBookmarkCommand}" />
+                        <Button Content="Load Bookmark"
+                                Margin="0 0 10 0"
+                                Command="{Binding Path=LoadBookmarkCommand}"
+                                IsEnabled="{Binding Path=SelectedBookmarkIndex, Converter={local:IsValidIndexConverter}}"/>
 
-                    <Button Content="Rename"
-                            Command="{Binding Path=RenameBookmarkCommand}" />
+                        <Button Content="Add"
+                                Margin="0 0 10 0"
+                                HorizontalAlignment="Left"
+                                Command="{Binding Path=AddBookmarkCommand}" />
 
-                    <Button Content="Delete"
-                            Command="{Binding Path=DeleteBookmarkCommand}" />
+                        <Button Content="Rename"
+                                Margin="0 0 10 0"
+                                Command="{Binding Path=RenameBookmarkCommand}"
+                                IsEnabled="{Binding Path=SelectedBookmarkIndex, Converter={local:IsValidIndexConverter}}"/>
 
-                </WrapPanel>
+                        <Button Content="Delete"
+                                Margin="0 0 10 0"
+                                Command="{Binding Path=DeleteBookmarkCommand}" 
+                                IsEnabled="{Binding Path=SelectedBookmarkIndex, Converter={local:IsValidIndexConverter}}"/>
 
-            </StackPanel>
-        </ScrollViewer>
-    </StackPanel>
+                    </WrapPanel>
+
+                    <TextBlock Text="Current Level:"
+                               Margin="0 10 0 0"/>
+
+                    <TextBlock Text="{Binding Path=CurrentLevelName}"
+                               Margin="0 3 0 0"
+                               TextWrapping="WrapWithOverflow"/>
+
+                </StackPanel>
+
+            </Grid>
+
+        </Grid>
+    </Grid>
 </Window>

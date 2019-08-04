@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 // ReSharper disable StringLiteralTypo
@@ -89,13 +90,19 @@ namespace Rayman2LevelSwitcher
             else if(e.KeyboardData.VirtualCode == 0x4C)
                 GameManagerVM.LoadOffsetLevel(1);
 
-            // R for random level
+            // R for reload level
             else if(e.KeyboardData.VirtualCode == 0x52)
-                GameManagerVM.LoadRandomLevel();
+                manager.ReloadLevel();
 
             // B to add bookmark
             else if(e.KeyboardData.VirtualCode == 0x42)
                 BookmarksVM.AddBookmark();
+        }
+
+        private void TreeViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is TreeViewItem item && item.DataContext is Rayman2LevelViewModel lvl)
+                lvl.LoadLevel();
         }
 
         #endregion

@@ -119,8 +119,32 @@ namespace Rayman2LevelSwitcher
                     BookmarkItems.Add(item);
 
                 _currentLevel = value;
+
+                // Get the level and container
+                var lvl = App.Levels.ToList().Find(x => String.Equals(x.FileName, value, StringComparison.InvariantCultureIgnoreCase));
+
+                if (lvl == null)
+                {
+                    CurrentLevelName = $"N/A";
+                    return;
+                }
+
+                var container = App.LevelContainers.ToList().Find(x => x.Levels.Contains(lvl));
+
+                if (container == null)
+                {
+                    CurrentLevelName = $"N/A";
+                    return;
+                }
+
+                CurrentLevelName = $"{container.Name} - {lvl.Name}";
             }
         }
+
+        /// <summary>
+        /// The name of the currently loaded level
+        /// </summary>
+        public string CurrentLevelName { get; set; }
 
         /// <summary>
         /// The index for the currently selected bookmark item

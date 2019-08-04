@@ -66,9 +66,9 @@
     <Compile Include="Helpers\WPF\BaseViewModel.cs" />
     <Compile Include="Helpers\WPF\Command\RelayCommand.cs" />
     <Compile Include="Extensions\VisualExtensions.cs" />
+    <Compile Include="Helpers\WPF\CommonCommands.cs" />
     <Compile Include="ViewModels\AppViewModel.cs" />
     <Compile Include="ViewModels\Bookmarks\BookmarkItemViewModel.cs" />
-    <Compile Include="Helpers\WPF\CommonCommands.cs" />
     <Compile Include="DataModels\Enums\Rayman2LevelType.cs" />
     <Compile Include="ViewModels\Levels\Rayman2LevelViewModel.cs" />
     <Compile Include="ViewModels\Levels\Rayman2LevelContainerViewModel.cs" />
