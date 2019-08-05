@@ -207,7 +207,7 @@ namespace Rayman2LevelSwitcher
                         }
                         else
                         {
-                            CurrentLevel = String.Empty;
+                            CurrentLevel = string.Empty;
                         }
 
                         await Task.Delay(1500);
@@ -295,26 +295,29 @@ namespace Rayman2LevelSwitcher
             if (String.IsNullOrEmpty(levelname))
                 return;
 
-            int bytesReadOrWritten = 0;
-            int off_xcoord = Memory.GetPointerPath(processHandle, 0x500560, 0x224, 0x310, 0x34, 0x0) + 0x1ac;
-            int off_ycoord = off_xcoord + 4;
-            int off_zcoord = off_xcoord + 8;
+            var coords = manager.PlayerCoordinates;
 
-            byte[] xCoordBuffer = new byte[4];
-            byte[] yCoordBuffer = new byte[4];
-            byte[] zCoordBuffer = new byte[4];
-
-            Memory.ReadProcessMemory(processHandle, off_xcoord, xCoordBuffer, 4, ref bytesReadOrWritten);
-            Memory.ReadProcessMemory(processHandle, off_ycoord, yCoordBuffer, 4, ref bytesReadOrWritten);
-            Memory.ReadProcessMemory(processHandle, off_zcoord, zCoordBuffer, 4, ref bytesReadOrWritten);
-
+//            int bytesReadOrWritten = 0;
+//            int off_xcoord = Memory.GetPointerPath(processHandle, 0x500560, 0x224, 0x310, 0x34, 0x0) + 0x1ac;
+//            int off_ycoord = off_xcoord + 4;
+//            int off_zcoord = off_xcoord + 8;
+//
+//            byte[] xCoordBuffer = new byte[4];
+//            byte[] yCoordBuffer = new byte[4];
+//            byte[] zCoordBuffer = new byte[4];
+//
+//            Memory.ReadProcessMemory(processHandle, off_xcoord, xCoordBuffer, 4, ref bytesReadOrWritten);
+//            Memory.ReadProcessMemory(processHandle, off_ycoord, yCoordBuffer, 4, ref bytesReadOrWritten);
+//            Memory.ReadProcessMemory(processHandle, off_zcoord, zCoordBuffer, 4, ref bytesReadOrWritten);
+//
             const string newBookmarkName = "Bookmark";
             int newBookmarkSuffix = 0;
 
             while (AllBookmarkItems.Any(x => x.Name == $"{newBookmarkName} {newBookmarkSuffix}"))
                 newBookmarkSuffix++;
-
-            var bookmark = new BookmarkItemViewModel(levelname, $"{newBookmarkName} {newBookmarkSuffix}", BitConverter.ToSingle(xCoordBuffer, 0), BitConverter.ToSingle(yCoordBuffer, 0), BitConverter.ToSingle(zCoordBuffer, 0));
+//
+//            var bookmark = new BookmarkItemViewModel(levelname, $"{newBookmarkName} {newBookmarkSuffix}", BitConverter.ToSingle(xCoordBuffer, 0), BitConverter.ToSingle(yCoordBuffer, 0), BitConverter.ToSingle(zCoordBuffer, 0));
+            var bookmark = new BookmarkItemViewModel(levelname, $"{newBookmarkName} {newBookmarkSuffix}", coords.Item1, coords.Item2, coords.Item3);
 
             AllBookmarkItems.Add(bookmark);
             BookmarkItems.Add(bookmark);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -36,8 +37,15 @@ namespace Rayman2LevelSwitcher
 
             foreach (int offset in offsets)
             {
-                ReadProcessMemory(processHandle, currentAddress + offset, buffer, buffer.Length, ref bytesReadOrWritten);
-                currentAddress = BitConverter.ToInt32(buffer, 0);
+                if (offset == offsets.Last())
+                {
+                    currentAddress += offset;
+                }
+                else
+                {
+                    ReadProcessMemory(processHandle, currentAddress + offset, buffer, buffer.Length, ref bytesReadOrWritten);
+                    currentAddress = BitConverter.ToInt32(buffer, 0);
+                }
             }
 
             return currentAddress;

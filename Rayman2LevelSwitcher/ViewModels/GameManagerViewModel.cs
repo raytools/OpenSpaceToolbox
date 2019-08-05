@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Rayman2LevelSwitcher
@@ -25,6 +25,7 @@ namespace Rayman2LevelSwitcher
             ActivateNoHealthCommand = new RelayCommand(() => new Rayman2Manager().ActivateNoHealth());
             ReloadLevelCommand = new RelayCommand(() => new Rayman2Manager().ReloadLevel());
             LoadRandomLevelCommand = new RelayCommand(LoadRandomLevel);
+            ShowGlmWindowCommand = new RelayCommand(ShowGlmWindow);
 
             // Create the properties
             Random = new Random();
@@ -76,6 +77,8 @@ namespace Rayman2LevelSwitcher
 
         public ICommand SavePositionCommand { get; }
 
+        public ICommand ShowGlmWindowCommand { get; }
+
         #endregion
 
         #region Public Methods
@@ -106,7 +109,7 @@ namespace Rayman2LevelSwitcher
 
             var lvls = App.Levels.ToList();
 
-            int currentIndex = lvls.FindIndex(x => String.Equals(x.FileName, levelName, StringComparison.CurrentCultureIgnoreCase));
+            int currentIndex = lvls.FindIndex(x => string.Equals(x.FileName, levelName, StringComparison.CurrentCultureIgnoreCase));
 
             if (currentIndex < 0)
                 return;
@@ -129,7 +132,7 @@ namespace Rayman2LevelSwitcher
         /// </summary>
         public void LoadSavedPosition()
         {
-            new Rayman2Manager().LoadPosition(SavedXPosition, SavedYPosition, SavedZPosition);
+            new Rayman2Manager().PlayerCoordinates = (SavedXPosition, SavedYPosition, SavedZPosition);
         }
 
         /// <summary>
@@ -137,27 +140,22 @@ namespace Rayman2LevelSwitcher
         /// </summary>
         public void SavePosition()
         {
-            int processHandle = new Rayman2Manager().GetRayman2ProcessHandle();
+            var coords = new Rayman2Manager().PlayerCoordinates;
+            SavedXPosition = coords.Item1;
+            SavedYPosition = coords.Item2;
+            SavedZPosition = coords.Item3;
+        }
 
-            if (processHandle < 0)
-                return;
-
-            int bytesReadOrWritten = 0;
-            int off_xcoord = Memory.GetPointerPath(processHandle, 0x500560, 0x224, 0x310, 0x34, 0x0) + 0x1ac;
-            int off_ycoord = off_xcoord + 4;
-            int off_zcoord = off_xcoord + 8;
-
-            byte[] xCoordBuffer = new byte[4];
-            byte[] yCoordBuffer = new byte[4];
-            byte[] zCoordBuffer = new byte[4];
-
-            Memory.ReadProcessMemory(processHandle, off_xcoord, xCoordBuffer, 4, ref bytesReadOrWritten);
-            Memory.ReadProcessMemory(processHandle, off_ycoord, yCoordBuffer, 4, ref bytesReadOrWritten);
-            Memory.ReadProcessMemory(processHandle, off_zcoord, zCoordBuffer, 4, ref bytesReadOrWritten);
-
-            SavedXPosition = BitConverter.ToSingle(xCoordBuffer, 0);
-            SavedYPosition = BitConverter.ToSingle(yCoordBuffer, 0);
-            SavedZPosition = BitConverter.ToSingle(zCoordBuffer, 0);
+        /// <summary>
+        /// Show the GLM Monitor 2000 window
+        /// </summary>
+        public void ShowGlmWindow()
+        {
+            GlmWindow glmWindow = new GlmWindow
+            {
+                Owner = Application.Current.MainWindow
+            };
+            glmWindow.Show();
         }
 
         #endregion
