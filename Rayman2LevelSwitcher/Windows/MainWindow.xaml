@@ -40,13 +40,16 @@
                 <MenuItem Header="0 HP"
                           Command="{Binding Path=ActivateNoHealthCommand}" />
 
+                <MenuItem Header="GLM Monitor 2000"
+                          Command="{Binding Path=ShowGlmWindowCommand}" />
+
             </MenuItem>
 
             <MenuItem Header="Settings">
                 <MenuItem Header="Enable hotkeys"
                           IsCheckable="True"
                           IsChecked="{Binding Path=App.HotkeysEnabled}"
-                          ToolTip="Enables hotkeys:&#x0a;R for random level&#x0a;K for previous level&#x0a;L for next level&#x0a;P to save position&#x0a;O to load position&#x0a;B to add bookmark" />
+                          ToolTip="Enables hotkeys:&#x0a;R - reload level&#x0a;K - previous level&#x0a;L - next level&#x0a;P - save position&#x0a;O - load position&#x0a;B - add bookmark" />
             </MenuItem>
 
         </Menu>
@@ -127,17 +130,17 @@
 
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="X: " />
-                                <TextBlock Text="{Binding Path=SavedXPosition}" />
+                                <TextBlock Text="{Binding Path=SavedXPosition, StringFormat={}{0:F3}}" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Y: " />
-                                <TextBlock Text="{Binding Path=SavedYPosition}" />
+                                <TextBlock Text="{Binding Path=SavedYPosition, StringFormat={}{0:F3}}" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Z: " />
-                                <TextBlock Text="{Binding Path=SavedZPosition}" />
+                                <TextBlock Text="{Binding Path=SavedZPosition, StringFormat={}{0:F3}}" />
                             </StackPanel>
 
                         </StackPanel>

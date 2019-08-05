@@ -13,39 +13,84 @@ namespace Rayman2LevelSwitcher
     {
         #region Constant Values
 
-        private const int Off_engineStructure = 0x500380;
-        private const int Off_engineMode = Off_engineStructure + 0x0;
-        private const int Off_levelName = Off_engineStructure + 0x1F;
-        private const int Off_healthpointer_1 = 0x500584;
-        private const int Off_voidpointer = 0x500FAA;
+        private const int OffEngineStructure = 0x500380;
+        private const int OffEngineMode = OffEngineStructure + 0x0;
+        private const int OffLevelName = OffEngineStructure + 0x1F;
+        private const int OffHealthPointer = 0x500584;
+        private const int OffVoidPointer = 0x500FAA;
 
         #endregion
 
+        public (float, float, float) PlayerCoordinates
+        {
+            get => ReadCoordinates(0x500560, 0x224, 0x310, 0x34, 0x0, 0x1ac);
+            set => WriteCoordinates(value.Item1, value.Item2, value.Item3, 0x500560, 0x224, 0x310, 0x34, 0x0, 0x1ac);
+        }
+
+        public (float, float, float) GlmCoordinates
+        {
+            get => ReadCoordinates(0x500298, 0x234, 0x10, 0xC, 0xB0);
+            set => WriteCoordinates(value.Item1, value.Item2, value.Item3, 0x500298, 0x234, 0x10, 0xC, 0xB0);
+        }
+
         /// <summary>
-        /// Loads the specified position
+        /// Write coordinates to the game memory
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        public void LoadPosition(float x, float y, float z)
+        /// <param name="baseAddress"></param>
+        /// <param name="offsets"></param>
+        private void WriteCoordinates(float x, float y, float z, int baseAddress, params int[] offsets)
         {
             int processHandle = GetRayman2ProcessHandle();
-
             if (processHandle < 0)
                 return;
 
             int bytesReadOrWritten = 0;
-            int off_xcoord = Memory.GetPointerPath(processHandle, 0x500560, 0x224, 0x310, 0x34, 0x0) + 0x1ac;
-            int off_ycoord = off_xcoord + 4;
-            int off_zcoord = off_xcoord + 8;
+            int offXcoord = Memory.GetPointerPath(processHandle, baseAddress, offsets);
+            int offYcoord = offXcoord + 4;
+            int offZcoord = offXcoord + 8;
 
             byte[] xCoordBuffer = BitConverter.GetBytes(x);
             byte[] yCoordBuffer = BitConverter.GetBytes(y);
             byte[] zCoordBuffer = BitConverter.GetBytes(z);
 
-            Memory.WriteProcessMemory(processHandle, off_xcoord, xCoordBuffer, 4, ref bytesReadOrWritten);
-            Memory.WriteProcessMemory(processHandle, off_ycoord, yCoordBuffer, 4, ref bytesReadOrWritten);
-            Memory.WriteProcessMemory(processHandle, off_zcoord, zCoordBuffer, 4, ref bytesReadOrWritten);
+            Memory.WriteProcessMemory(processHandle, offXcoord, xCoordBuffer, 4, ref bytesReadOrWritten);
+            Memory.WriteProcessMemory(processHandle, offYcoord, yCoordBuffer, 4, ref bytesReadOrWritten);
+            Memory.WriteProcessMemory(processHandle, offZcoord, zCoordBuffer, 4, ref bytesReadOrWritten);
+        }
+
+        /// <summary>
+        /// Reads coordinates from game memory
+        /// </summary>
+        /// <param name="baseAddress"></param>
+        /// <param name="offsets"></param>
+        /// <returns></returns>
+        private (float, float, float) ReadCoordinates(int baseAddress, params int[] offsets)
+        {
+            int processHandle = GetRayman2ProcessHandle();
+            if (processHandle < 0)
+                return (0, 0, 0);
+
+            int bytesReadOrWritten = 0;
+            int offXcoord = Memory.GetPointerPath(processHandle, baseAddress, offsets);
+            int offYcoord = offXcoord + 4;
+            int offZcoord = offXcoord + 8;
+
+            byte[] xCoordBuffer = new byte[4];
+            byte[] yCoordBuffer = new byte[4];
+            byte[] zCoordBuffer = new byte[4];
+
+            Memory.ReadProcessMemory(processHandle, offXcoord, xCoordBuffer, 4, ref bytesReadOrWritten);
+            Memory.ReadProcessMemory(processHandle, offYcoord, yCoordBuffer, 4, ref bytesReadOrWritten);
+            Memory.ReadProcessMemory(processHandle, offZcoord, zCoordBuffer, 4, ref bytesReadOrWritten);
+
+            return (
+                BitConverter.ToSingle(xCoordBuffer, 0),
+                BitConverter.ToSingle(yCoordBuffer, 0),
+                BitConverter.ToSingle(zCoordBuffer, 0)
+            );
         }
 
         /// <summary>
@@ -99,7 +144,7 @@ namespace Rayman2LevelSwitcher
 
             byte[] buffer = new byte[16];
 
-            Memory.ReadProcessMemory(processHandle, Off_levelName, buffer, buffer.Length, ref bytesReadOrWritten);
+            Memory.ReadProcessMemory(processHandle, OffLevelName, buffer, buffer.Length, ref bytesReadOrWritten);
 
             string levelName = Encoding.ASCII.GetString(buffer);
 
@@ -116,14 +161,14 @@ namespace Rayman2LevelSwitcher
         {
             const int nChars = 256;
 
-            StringBuilder Buff = new StringBuilder(nChars);
+            StringBuilder buff = new StringBuilder(nChars);
 
             IntPtr handle = Memory.GetForegroundWindow();
 
-            if (Memory.GetWindowText(handle, Buff, nChars) <= 0)
+            if (Memory.GetWindowText(handle, buff, nChars) <= 0)
                 return false;
 
-            return Buff.ToString() == "Rayman II";
+            return buff.ToString() == "Rayman II";
         }
 
         /// <summary>
@@ -141,7 +186,7 @@ namespace Rayman2LevelSwitcher
 
             byte[] pausePointerBuffer = new byte[4];
 
-            Memory.ReadProcessMemory(processHandle, Off_voidpointer, pausePointerBuffer, pausePointerBuffer.Length, ref bytesReadOrWritten);
+            Memory.ReadProcessMemory(processHandle, OffVoidPointer, pausePointerBuffer, pausePointerBuffer.Length, ref bytesReadOrWritten);
 
             return BitConverter.ToInt32(pausePointerBuffer, 0) == 1;
         }
@@ -161,11 +206,11 @@ namespace Rayman2LevelSwitcher
             byte[] buffer = { 0 };
             byte[] healthPointerBuffer = new byte[4];
 
-            Memory.ReadProcessMemory(processHandle, Off_healthpointer_1, healthPointerBuffer, healthPointerBuffer.Length, ref bytesReadOrWritten);
+            Memory.ReadProcessMemory(processHandle, OffHealthPointer, healthPointerBuffer, healthPointerBuffer.Length, ref bytesReadOrWritten);
 
-            int off_healthPointer = BitConverter.ToInt32(healthPointerBuffer, 0) + 0x245;
+            int offHealthPointer = BitConverter.ToInt32(healthPointerBuffer, 0) + 0x245;
 
-            Memory.WriteProcessMemory(processHandle, off_healthPointer, buffer, buffer.Length, ref bytesReadOrWritten);
+            Memory.WriteProcessMemory(processHandle, offHealthPointer, buffer, buffer.Length, ref bytesReadOrWritten);
         }
 
         /// <summary>
@@ -173,7 +218,7 @@ namespace Rayman2LevelSwitcher
         /// </summary>
         public void ActivateVoid()
         {
-            Process process = new Rayman2Manager().GetRayman2Process();
+            Process process = GetRayman2Process();
 
             if (process == null)
             {
@@ -187,7 +232,7 @@ namespace Rayman2LevelSwitcher
 
             byte[] buffer = { 0 };
 
-            Memory.WriteProcessMemory((int)processHandle, Rayman2Manager.Off_voidpointer, buffer, buffer.Length, ref bytesReadOrWritten);
+            Memory.WriteProcessMemory((int)processHandle, OffVoidPointer, buffer, buffer.Length, ref bytesReadOrWritten);
         }
 
         /// <summary>
@@ -195,19 +240,17 @@ namespace Rayman2LevelSwitcher
         /// </summary>
         public void ReloadLevel()
         {
-            var manager = new Rayman2Manager();
-
-            int processHandle = manager.GetRayman2ProcessHandle();
+            int processHandle = GetRayman2ProcessHandle();
 
             int bytesReadOrWritten = 0;
 
             byte[] currentBufferLevelName = new byte[1];
-            Memory.ReadProcessMemory(processHandle, Off_levelName, currentBufferLevelName, currentBufferLevelName.Length, ref bytesReadOrWritten);
+            Memory.ReadProcessMemory(processHandle, OffLevelName, currentBufferLevelName, currentBufferLevelName.Length, ref bytesReadOrWritten);
 
             if (currentBufferLevelName[0] == 0)
             {
                 byte[] bufferLevelNameMenu = Encoding.ASCII.GetBytes("menu" + Char.MinValue); // null-terminated
-                Memory.WriteProcessMemory(processHandle, Off_levelName, bufferLevelNameMenu, bufferLevelNameMenu.Length, ref bytesReadOrWritten);
+                Memory.WriteProcessMemory(processHandle, OffLevelName, bufferLevelNameMenu, bufferLevelNameMenu.Length, ref bytesReadOrWritten);
                 return;
             }
 
@@ -216,7 +259,7 @@ namespace Rayman2LevelSwitcher
                 6
             };
 
-            Memory.WriteProcessMemory(processHandle, Off_engineMode, buffer, buffer.Length, ref bytesReadOrWritten);
+            Memory.WriteProcessMemory(processHandle, OffEngineMode, buffer, buffer.Length, ref bytesReadOrWritten);
         }
 
         /// <summary>
@@ -225,21 +268,20 @@ namespace Rayman2LevelSwitcher
         /// <param name="levelName"></param>
         public void ChangeLevel(string levelName)
         {
-            var manager = new Rayman2Manager();
-
-            int processHandle = manager.GetRayman2ProcessHandle();
+            int processHandle = GetRayman2ProcessHandle();
 
             int bytesReadOrWritten = 0;
 
             var buffer = Encoding.ASCII.GetBytes(levelName + Char.MinValue);
-            Memory.WriteProcessMemory(processHandle, Off_levelName, buffer, buffer.Length, ref bytesReadOrWritten);
+            Memory.WriteProcessMemory(processHandle, OffLevelName, buffer, buffer.Length, ref bytesReadOrWritten);
 
             buffer = new byte[]
             {
                 6
             };
 
-            Memory.WriteProcessMemory(processHandle, Off_engineMode, buffer, buffer.Length, ref bytesReadOrWritten);
+            Memory.WriteProcessMemory(processHandle, OffEngineMode, buffer, buffer.Length, ref bytesReadOrWritten);
         }
+
     }
 }
