@@ -73,6 +73,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\IsValidIndexConverter.cs" />
+    <Compile Include="Helpers\WindowProperties.cs" />
     <Compile Include="Helpers\WPF\BaseValueConverter.cs" />
     <Compile Include="Helpers\WPF\BindingProxy.cs" />
     <Compile Include="Helpers\WPF\Command\AsyncRelayCommand.cs" />
@@ -92,12 +93,26 @@
     <Compile Include="ViewModels\GameManagerViewModel.cs" />
     <Compile Include="Game\Rayman2Manager.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="Views\GameManagerFullView.xaml.cs">
+      <DependentUpon>GameManagerFullView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GameManagerMinimizedView.xaml.cs">
+      <DependentUpon>GameManagerMinimizedView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\GlmWindow.xaml.cs">
       <DependentUpon>GlmWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\RenameDialog.xaml.cs">
       <DependentUpon>RenameDialog.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\GameManagerFullView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GameManagerMinimizedView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\GlmWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -164,9 +179,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

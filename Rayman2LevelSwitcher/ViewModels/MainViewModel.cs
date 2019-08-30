@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Rayman2LevelSwitcher
 {
@@ -13,10 +15,18 @@ namespace Rayman2LevelSwitcher
             AppVm = new AppViewModel();
             GameManagerVm = new GameManagerViewModel(AppVm);
             BookmarksVm = new BookmarksViewModel(AppVm);
+            
+            // Create commands
+            ToggleMinimizedUiCommand = new RelayCommand(ToggleMinimizedUi);
+
+            // Set full UI as default
+            CurrentView = new GameManagerFullView();
 
             // Setup keyboard hook
             GlobalKeyboardHook = new GlobalKeyboardHook();
             GlobalKeyboardHook.KeyboardPressed += OnKeyPressed;
+
+            WindowProperties = new WindowProperties {Width = 640, Height = 480, ResizeMode = ResizeMode.CanResize};
         }
 
         #endregion
@@ -76,6 +86,12 @@ namespace Rayman2LevelSwitcher
 
         #endregion
 
+        #region Commands
+
+        public ICommand ToggleMinimizedUiCommand { get; }
+
+        #endregion
+
         #region Private Properties
 
         private GlobalKeyboardHook GlobalKeyboardHook { get; }
@@ -90,9 +106,30 @@ namespace Rayman2LevelSwitcher
 
         public BookmarksViewModel BookmarksVm { get; }
 
+        public UserControl CurrentView { get; set; }
+
+        public WindowProperties WindowProperties { get; }
+
         #endregion
 
         #region Public Methods
+
+        public void ToggleMinimizedUi()
+        {
+            if (CurrentView is GameManagerFullView)
+            {
+                CurrentView = new GameManagerMinimizedView();
+                WindowProperties.SetSize(280, 520);
+                WindowProperties.ResizeMode = ResizeMode.NoResize;
+            }
+            else
+            {
+                CurrentView = new GameManagerFullView();
+                WindowProperties.SetSize(640, 480);
+                WindowProperties.ResizeMode = ResizeMode.CanResize;
+            }
+
+        }
 
         public void Dispose()
         {

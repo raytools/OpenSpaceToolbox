@@ -38,21 +38,10 @@ namespace Rayman2LevelSwitcher
 
         #region Event Handlers
 
-        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
+        private void OnWindowClosing(object sender, CancelEventArgs e)
         {
             ViewModel.Dispose();
             ViewModel.BookmarksVm.SaveBookmarks();
-        }
-
-        private void Listbox_bookmarklist_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            ViewModel.BookmarksVm.SelectedBookmark?.LoadBookmark();
-        }
-
-        private void TreeViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (sender is TreeViewItem item && item.DataContext is Rayman2LevelViewModel lvl)
-                lvl.LoadLevel();
         }
 
         #endregion
