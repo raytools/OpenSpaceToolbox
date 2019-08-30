@@ -6,13 +6,13 @@
         xmlns:local="clr-namespace:Rayman2LevelSwitcher"
         xmlns:dd="urn:gong-wpf-dragdrop"
         mc:Ignorable="d"
-        Title="Rayman 2 - Level Switcher"
+        Title="Rayman 2 Level Switcher"
         Height="480"
         Width="640"
         MinHeight="250"
         MinWidth="250"
         Closing="MainWindow_OnClosing"
-        d:DataContext="{d:DesignInstance local:GameManagerViewModel}">
+        d:DataContext="{d:DesignInstance local:MainViewModel}">
     <Window.Resources>
         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
             <Setter Property="Padding" Value="5 2" />
@@ -35,20 +35,20 @@
             <MenuItem Header="Mods">
 
                 <MenuItem Header="Void"
-                          Command="{Binding Path=ActivateVoidCommand}" />
+                          Command="{Binding Path=GameManagerVm.ActivateVoidCommand}" />
 
                 <MenuItem Header="0 HP"
-                          Command="{Binding Path=ActivateNoHealthCommand}" />
+                          Command="{Binding Path=GameManagerVm.ActivateNoHealthCommand}" />
 
                 <MenuItem Header="GLM Monitor 2000"
-                          Command="{Binding Path=ShowGlmWindowCommand}" />
+                          Command="{Binding Path=GameManagerVm.ShowGlmWindowCommand}" />
 
             </MenuItem>
 
             <MenuItem Header="Settings">
                 <MenuItem Header="Enable hotkeys"
                           IsCheckable="True"
-                          IsChecked="{Binding Path=App.HotkeysEnabled}"
+                          IsChecked="{Binding Path=AppVm.HotkeysEnabled}"
                           ToolTip="Enables hotkeys:&#x0a;R - reload level&#x0a;K - previous level&#x0a;L - next level&#x0a;P - save position&#x0a;O - load position&#x0a;B - add bookmark" />
             </MenuItem>
 
@@ -78,7 +78,7 @@
                            FontSize="14" />
 
                 <TreeView Grid.Row="1"
-                          ItemsSource="{Binding Path=App.LevelContainers, Mode=OneTime}"
+                          ItemsSource="{Binding Path=AppVm.LevelContainers, Mode=OneTime}"
                           VerticalAlignment="Stretch"
                           Margin="0 10">
 
@@ -103,11 +103,11 @@
                                Margin="0 5">
 
                         <Button Content="Reload level"
-                                Command="{Binding Path=ReloadLevelCommand}"
+                                Command="{Binding Path=GameManagerVm.ReloadLevelCommand}"
                                 Margin="0 0 10 0"/>
 
                         <Button Content="Random level"
-                                Command="{Binding Path=LoadRandomLevelCommand}"/>
+                                Command="{Binding Path=GameManagerVm.LoadRandomLevelCommand}"/>
 
                     </WrapPanel>
 
@@ -117,11 +117,11 @@
                         <StackPanel>
 
                             <Button Content="Save pos"
-                                    Command="{Binding Path=SavePositionCommand}"
+                                    Command="{Binding Path=GameManagerVm.SavePositionCommand}"
                                     Margin="0 0 0 5"/>
 
                             <Button Content="Load pos"
-                                    Command="{Binding Path=LoadSavedPositionCommand}"/>
+                                    Command="{Binding Path=GameManagerVm.LoadSavedPositionCommand}"/>
 
                         </StackPanel>
 
@@ -130,17 +130,17 @@
 
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="X: " />
-                                <TextBlock Text="{Binding Path=SavedXPosition, StringFormat={}{0:F3}}" />
+                                <TextBlock Text="{Binding Path=GameManagerVm.SavedXPosition, StringFormat={}{0:F3}}" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Y: " />
-                                <TextBlock Text="{Binding Path=SavedYPosition, StringFormat={}{0:F3}}" />
+                                <TextBlock Text="{Binding Path=GameManagerVm.SavedYPosition, StringFormat={}{0:F3}}" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Z: " />
-                                <TextBlock Text="{Binding Path=SavedZPosition, StringFormat={}{0:F3}}" />
+                                <TextBlock Text="{Binding Path=GameManagerVm.SavedZPosition, StringFormat={}{0:F3}}" />
                             </StackPanel>
 
                         </StackPanel>
@@ -159,8 +159,7 @@
 
             <Grid x:Name="BookmarkPanel"
                   Grid.Column="2"
-                  Margin="10"
-                  d:DataContext="{d:DesignInstance local:BookmarksViewModel}">
+                  Margin="10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
@@ -175,8 +174,8 @@
                            FontSize="14" />
 
                 <ListBox Grid.Row="1"
-                         ItemsSource="{Binding Path=BookmarkItems}"
-                         SelectedIndex="{Binding Path=SelectedBookmarkIndex}"
+                         ItemsSource="{Binding Path=BookmarksVm.BookmarkItems}"
+                         SelectedIndex="{Binding Path=BookmarksVm.SelectedBookmarkIndex}"
                          dd:DragDrop.IsDragSource="true"
                          dd:DragDrop.IsDropTarget="true"
                          Margin="0 10">
@@ -191,9 +190,9 @@
                         </Style>
                     </ListBox.ItemContainerStyle>
                     <ListBox.InputBindings>
-                        <KeyBinding Key="F2" Command="{Binding Path=RenameBookmarkCommand}" />
-                        <KeyBinding Key="Delete" Command="{Binding Path=DeleteBookmarkCommand}" />
-                        <KeyBinding Key="Back" Command="{Binding Path=DeleteBookmarkCommand}" />
+                        <KeyBinding Key="F2" Command="{Binding Path=BookmarksVm.RenameBookmarkCommand}" />
+                        <KeyBinding Key="Delete" Command="{Binding Path=BookmarksVm.DeleteBookmarkCommand}" />
+                        <KeyBinding Key="Back" Command="{Binding Path=BookmarksVm.DeleteBookmarkCommand}" />
                     </ListBox.InputBindings>
                 </ListBox>
 
@@ -203,30 +202,30 @@
 
                         <Button Content="Load Bookmark"
                                 Margin="0 0 10 0"
-                                Command="{Binding Path=LoadBookmarkCommand}"
-                                IsEnabled="{Binding Path=SelectedBookmarkIndex, Converter={local:IsValidIndexConverter}}"/>
+                                Command="{Binding Path=BookmarksVm.LoadBookmarkCommand}"
+                                IsEnabled="{Binding Path=BookmarksVm.SelectedBookmarkIndex, Converter={local:IsValidIndexConverter}}"/>
 
                         <Button Content="Add"
                                 Margin="0 0 10 0"
                                 HorizontalAlignment="Left"
-                                Command="{Binding Path=AddBookmarkCommand}" />
+                                Command="{Binding Path=BookmarksVm.AddBookmarkCommand}" />
 
                         <Button Content="Rename"
                                 Margin="0 0 10 0"
-                                Command="{Binding Path=RenameBookmarkCommand}"
-                                IsEnabled="{Binding Path=SelectedBookmarkIndex, Converter={local:IsValidIndexConverter}}"/>
+                                Command="{Binding Path=BookmarksVm.RenameBookmarkCommand}"
+                                IsEnabled="{Binding Path=BookmarksVm.SelectedBookmarkIndex, Converter={local:IsValidIndexConverter}}"/>
 
                         <Button Content="Delete"
                                 Margin="0 0 10 0"
-                                Command="{Binding Path=DeleteBookmarkCommand}" 
-                                IsEnabled="{Binding Path=SelectedBookmarkIndex, Converter={local:IsValidIndexConverter}}"/>
+                                Command="{Binding Path=BookmarksVm.DeleteBookmarkCommand}" 
+                                IsEnabled="{Binding Path=BookmarksVm.SelectedBookmarkIndex, Converter={local:IsValidIndexConverter}}"/>
 
                     </WrapPanel>
 
                     <TextBlock Text="Current Level:"
                                Margin="0 10 0 0"/>
 
-                    <TextBlock Text="{Binding Path=CurrentLevelName}"
+                    <TextBlock Text="{Binding Path=BookmarksVm.CurrentLevelName}"
                                Margin="0 3 0 0"
                                TextWrapping="WrapWithOverflow"/>
 

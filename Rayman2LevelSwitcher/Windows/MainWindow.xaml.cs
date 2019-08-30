@@ -4,8 +4,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-// ReSharper disable StringLiteralTypo
-
 namespace Rayman2LevelSwitcher
 {
     /*
@@ -23,26 +21,17 @@ namespace Rayman2LevelSwitcher
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, IDisposable
+    public partial class MainWindow : Window
     {
         #region Constructor
 
         /// <summary>
         /// Default constructor
         /// </summary>
-        public MainWindow()
+        public MainWindow(MainViewModel mainVm)
         {
-            // Set up UI
             InitializeComponent();
-
-            // Create view models
-            AppVM = new AppViewModel();
-            DataContext = GameManagerVM = new GameManagerViewModel(AppVM);
-            BookmarkPanel.DataContext = BookmarksVM = new BookmarksViewModel(AppVM);
-
-            // Setup keyboard hook
-            GlobalKeyboardHook = new GlobalKeyboardHook();
-            GlobalKeyboardHook.KeyboardPressed += OnKeyPressed;
+            DataContext = ViewModel = mainVm;
         }
 
         #endregion
@@ -51,52 +40,13 @@ namespace Rayman2LevelSwitcher
 
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)
         {
-            Dispose();
-            BookmarksVM.SaveBookmarks();
+            ViewModel.Dispose();
+            ViewModel.BookmarksVm.SaveBookmarks();
         }
 
         private void Listbox_bookmarklist_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            BookmarksVM.SelectedBookmark?.LoadBookmark();
-        }
-
-        public void OnKeyPressed(object sender, GlobalKeyboardHookEventArgs e)
-        {
-            var manager = new Rayman2Manager();
-
-            if (!AppVM.HotkeysEnabled || Application.Current.Windows.Count > 1 || manager.IsRayman2Paused() || !manager.IsRayman2Focused() && !Application.Current.MainWindow.IsActive)
-            {
-                e.Handled = false;
-                return;
-            }
-
-            // Only handle key down
-            if (e.KeyboardState != GlobalKeyboardHook.KeyboardState.KeyDown)
-                return;
-
-            // O to load position
-            if (e.KeyboardData.VirtualCode == 0x4F)
-                GameManagerVM.LoadSavedPosition();
-
-            // P to save position
-            else if (e.KeyboardData.VirtualCode == 0x50)
-                GameManagerVM.SavePosition();
-
-            // K for previous level
-            else if(e.KeyboardData.VirtualCode == 0x4B)
-                GameManagerVM.LoadOffsetLevel(-1);
-
-            // L for next level
-            else if(e.KeyboardData.VirtualCode == 0x4C)
-                GameManagerVM.LoadOffsetLevel(1);
-
-            // R for reload level
-            else if(e.KeyboardData.VirtualCode == 0x52)
-                manager.ReloadLevel();
-
-            // B to add bookmark
-            else if(e.KeyboardData.VirtualCode == 0x42)
-                BookmarksVM.AddBookmark();
+            ViewModel.BookmarksVm.SelectedBookmark?.LoadBookmark();
         }
 
         private void TreeViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -109,37 +59,7 @@ namespace Rayman2LevelSwitcher
 
         #region Private Properties
 
-        /// <summary>
-        /// The global keyboard hook
-        /// </summary>
-        private GlobalKeyboardHook GlobalKeyboardHook { get; }
-
-        /// <summary>
-        /// The main window view model
-        /// </summary>
-        private GameManagerViewModel GameManagerVM { get; }
-
-        /// <summary>
-        /// The bookmarks view model
-        /// </summary>
-        private BookmarksViewModel BookmarksVM { get; }
-
-        /// <summary>
-        /// The app view model
-        /// </summary>
-        private AppViewModel AppVM { get; }
-
-        #endregion
-
-        #region Public Methods
-
-        /// <summary>
-        /// Dispose
-        /// </summary>
-        public void Dispose()
-        {
-            GlobalKeyboardHook?.Dispose();
-        }
+        private MainViewModel ViewModel { get; }
 
         #endregion
     }
