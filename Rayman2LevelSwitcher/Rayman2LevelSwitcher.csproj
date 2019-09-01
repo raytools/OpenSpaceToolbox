@@ -73,6 +73,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\IsValidIndexConverter.cs" />
+    <Compile Include="Game\GenericGameManager.cs" />
+    <Compile Include="Game\OpenspaceGameManager.cs" />
     <Compile Include="Helpers\WindowProperties.cs" />
     <Compile Include="Helpers\WPF\BaseValueConverter.cs" />
     <Compile Include="Helpers\WPF\BindingProxy.cs" />
@@ -179,7 +181,10 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Game\Extras\" />
+    <Folder Include="Game\Games\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

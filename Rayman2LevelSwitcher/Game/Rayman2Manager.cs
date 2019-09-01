@@ -9,6 +9,7 @@ namespace Rayman2LevelSwitcher
     /// <summary>
     /// The manager for Rayman 2 operations
     /// </summary>
+    /// TODO: extend OpenspaceGameManager
     public class Rayman2Manager
     {
         #region Constant Values
@@ -27,6 +28,7 @@ namespace Rayman2LevelSwitcher
             set => WriteCoordinates(value.Item1, value.Item2, value.Item3, 0x500560, 0x224, 0x310, 0x34, 0x0, 0x1ac);
         }
 
+        //TODO: to generic - extra
         public (float, float, float) GlmCoordinates
         {
             get => ReadCoordinates(0x500298, 0x234, 0x10, 0xC, 0xB0);
@@ -43,7 +45,7 @@ namespace Rayman2LevelSwitcher
         /// <param name="offsets"></param>
         private void WriteCoordinates(float x, float y, float z, int baseAddress, params int[] offsets)
         {
-            int processHandle = GetRayman2ProcessHandle();
+            int processHandle = GetProcessHandle();
             if (processHandle < 0)
                 return;
 
@@ -69,7 +71,7 @@ namespace Rayman2LevelSwitcher
         /// <returns></returns>
         private (float, float, float) ReadCoordinates(int baseAddress, params int[] offsets)
         {
-            int processHandle = GetRayman2ProcessHandle();
+            int processHandle = GetProcessHandle();
             if (processHandle < 0)
                 return (0, 0, 0);
 
@@ -98,7 +100,7 @@ namespace Rayman2LevelSwitcher
         /// </summary>
         /// <param name="showMessage">Indicates if a message should be shown if the process is not found</param>
         /// <returns></returns>
-        public int GetRayman2ProcessHandle(bool showMessage = true)
+        public int GetProcessHandle(bool showMessage = true)
         {
             var process = GetRayman2Process();
 
@@ -157,7 +159,7 @@ namespace Rayman2LevelSwitcher
         /// Indicates if Rayman 2 if focused
         /// </summary>
         /// <returns>True if it is focused</returns>
-        public bool IsRayman2Focused()
+        public bool IsGameFocused()
         {
             const int nChars = 256;
 
@@ -175,9 +177,9 @@ namespace Rayman2LevelSwitcher
         /// Indicates if Rayman 2 is paused
         /// </summary>
         /// <returns>True if it is paused</returns>
-        public bool IsRayman2Paused()
+        public bool IsGamePaused()
         {
-            int processHandle = GetRayman2ProcessHandle(false);
+            int processHandle = GetProcessHandle(false);
 
             if (processHandle < 0)
                 return false;
@@ -194,9 +196,10 @@ namespace Rayman2LevelSwitcher
         /// <summary>
         /// Activate no health in Rayman 2
         /// </summary>
+        /// TODO: to generic - extra
         public void ActivateNoHealth()
         {
-            int processHandle = GetRayman2ProcessHandle();
+            int processHandle = GetProcessHandle();
 
             if (processHandle < 0)
                 return;
@@ -216,6 +219,7 @@ namespace Rayman2LevelSwitcher
         /// <summary>
         /// Activate void in Rayman 2
         /// </summary>
+        /// TODO: to generic - extra
         public void ActivateVoid()
         {
             Process process = GetRayman2Process();
@@ -240,7 +244,7 @@ namespace Rayman2LevelSwitcher
         /// </summary>
         public void ReloadLevel()
         {
-            int processHandle = GetRayman2ProcessHandle();
+            int processHandle = GetProcessHandle();
 
             int bytesReadOrWritten = 0;
 
@@ -268,7 +272,7 @@ namespace Rayman2LevelSwitcher
         /// <param name="levelName"></param>
         public void ChangeLevel(string levelName)
         {
-            int processHandle = GetRayman2ProcessHandle();
+            int processHandle = GetProcessHandle();
 
             int bytesReadOrWritten = 0;
 

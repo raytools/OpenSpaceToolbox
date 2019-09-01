@@ -37,7 +37,7 @@ namespace Rayman2LevelSwitcher
         {
             var manager = new Rayman2Manager();
 
-            if (!AppVm.HotkeysEnabled || manager.IsRayman2Paused() || !manager.IsRayman2Focused() && !Application.Current.MainWindow.IsActive)
+            if (!AppVm.HotkeysEnabled || manager.IsGamePaused() || !manager.IsGameFocused() && !Application.Current.MainWindow.IsActive)
             {
                 e.Handled = false;
                 return;

@@ -73,7 +73,7 @@ namespace Rayman2LevelSwitcher
                 {
                     try
                     {
-                        int processHandle = manager.GetRayman2ProcessHandle(false);
+                        int processHandle = manager.GetProcessHandle(false);
 
                         if (processHandle >= 0)
                         {

@@ -100,7 +100,7 @@ namespace Rayman2LevelSwitcher
         {
             var manager = new Rayman2Manager();
 
-            int processHandle = manager.GetRayman2ProcessHandle();
+            int processHandle = manager.GetProcessHandle();
 
             if (processHandle < 0)
                 return;
