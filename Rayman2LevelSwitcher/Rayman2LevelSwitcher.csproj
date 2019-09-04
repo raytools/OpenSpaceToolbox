@@ -73,8 +73,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\IsValidIndexConverter.cs" />
-    <Compile Include="Game\GenericGameManager.cs" />
-    <Compile Include="Game\OpenspaceGameManager.cs" />
+    <Compile Include="GameManager\Games\Rayman2GameManager.cs" />
+    <Compile Include="GameManager\GenericGameManager.cs" />
+    <Compile Include="GameManager\OpenspaceGameManager.cs" />
     <Compile Include="Helpers\WindowProperties.cs" />
     <Compile Include="Helpers\WPF\BaseValueConverter.cs" />
     <Compile Include="Helpers\WPF\BindingProxy.cs" />
@@ -93,7 +94,7 @@
     <Compile Include="ViewModels\Levels\Rayman2LevelContainerViewModel.cs" />
     <Compile Include="ViewModels\Bookmarks\BookmarksViewModel.cs" />
     <Compile Include="ViewModels\GameManagerViewModel.cs" />
-    <Compile Include="Game\Rayman2Manager.cs" />
+    <Compile Include="GameManager\Rayman2Manager.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Views\GameManagerFullView.xaml.cs">
       <DependentUpon>GameManagerFullView.xaml</DependentUpon>
@@ -182,8 +183,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Game\Extras\" />
-    <Folder Include="Game\Games\" />
+    <Folder Include="GameManager\Extras\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
