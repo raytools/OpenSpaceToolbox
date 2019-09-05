@@ -27,29 +27,33 @@
             <RowDefinition Height="4*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <WrapPanel Grid.Row="0"
-                   HorizontalAlignment="Left"
-                   Orientation="Horizontal">
-            <Button Content="GLM"
-                    Command="{Binding Path=GameManagerVm.ShowGlmWindowCommand}" />
-            <Button Content="Void"
-                    Command="{Binding Path=GameManagerVm.ActivateVoidCommand}" />
-            <Button Content="0 HP"
-                    Command="{Binding Path=GameManagerVm.ActivateNoHealthCommand}" />
-        </WrapPanel>
+
+        <ItemsControl Grid.Row="0" ItemsSource="{Binding GameManager.ExtraActions}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Content="{Binding ShortName}" Command="{Binding ExecuteActionCommand}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+
         <WrapPanel Grid.Row="0"
                    HorizontalAlignment="Right"
                    Orientation="Horizontal">
             <CheckBox Content="Hotkeys"
                       VerticalAlignment="Center"
-                      IsChecked="{Binding Path=AppVm.HotkeysEnabled}"
-                      ToolTip="Enables hotkeys:&#x0a;R - reload level&#x0a;K - previous level&#x0a;L - next level&#x0a;P - save position&#x0a;O - load position&#x0a;B - add bookmark" />
+                      IsChecked="{Binding Path=HotkeysEnabled}"
+                      ToolTip="{Binding Path=HotkeysToggleTooltip}" />
 
             <Button Content="Full UI"
                     Command="{Binding Path=ToggleMinimizedUiCommand}" />
         </WrapPanel>
         <TreeView Grid.Row="1"
-                  ItemsSource="{Binding Path=AppVm.LevelContainers, Mode=OneTime}"
+                  ItemsSource="{Binding Path=GameManager.LevelContainers, Mode=OneTime}"
                   Margin="0">
 
             <TreeView.ItemTemplate>

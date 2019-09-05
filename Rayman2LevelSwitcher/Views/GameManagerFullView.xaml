@@ -27,24 +27,24 @@
                           Command="{x:Static local:CommonCommands.CloseAppCommand}" />
             </MenuItem>
 
-            <MenuItem Header="Mods">
-
-                <MenuItem Header="Void"
-                          Command="{Binding Path=GameManagerVm.ActivateVoidCommand}" />
-
-                <MenuItem Header="0 HP"
-                          Command="{Binding Path=GameManagerVm.ActivateNoHealthCommand}" />
-
-                <MenuItem Header="GLM Monitor 2000"
-                          Command="{Binding Path=GameManagerVm.ShowGlmWindowCommand}" />
-
+            <MenuItem Header="Extras" ItemsSource="{Binding GameManager.ExtraActions}">
+                <MenuItem.ItemContainerStyle>
+                    <Style TargetType="{x:Type MenuItem}">
+                        <Setter Property="Command" Value="{Binding ExecuteActionCommand}" />
+                    </Style>
+                </MenuItem.ItemContainerStyle>
+                <MenuItem.ItemTemplate>
+                    <HierarchicalDataTemplate DataType="{x:Type local:ExtraAction}">
+                        <TextBlock Text="{Binding Name}"></TextBlock>
+                    </HierarchicalDataTemplate>
+                </MenuItem.ItemTemplate>
             </MenuItem>
 
             <MenuItem Header="Settings">
                 <MenuItem Header="Enable hotkeys"
                           IsCheckable="True"
-                          IsChecked="{Binding Path=AppVm.HotkeysEnabled}"
-                          ToolTip="Enables hotkeys:&#x0a;R - reload level&#x0a;K - previous level&#x0a;L - next level&#x0a;P - save position&#x0a;O - load position&#x0a;B - add bookmark" />
+                          IsChecked="{Binding Path=HotkeysEnabled}"
+                          ToolTip="{Binding Path=HotkeysToggleTooltip}" />
                 <MenuItem Header="Minimized UI"
                           Command="{Binding Path=ToggleMinimizedUiCommand}"></MenuItem>
             </MenuItem>
@@ -75,7 +75,7 @@
                            FontSize="14" />
 
                 <TreeView Grid.Row="1"
-                          ItemsSource="{Binding Path=AppVm.LevelContainers, Mode=OneTime}"
+                          ItemsSource="{Binding Path=GameManager.LevelContainers, Mode=OneTime}"
                           VerticalAlignment="Stretch"
                           Margin="0 10">
 

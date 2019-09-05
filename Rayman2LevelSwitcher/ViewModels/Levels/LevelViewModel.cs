@@ -5,7 +5,7 @@ namespace Rayman2LevelSwitcher
     /// <summary>
     /// View model for a Rayman 2 level
     /// </summary>
-    public class Rayman2LevelViewModel : BaseViewModel
+    public class LevelViewModel : BaseViewModel
     {
         #region Constructor
 
@@ -15,13 +15,11 @@ namespace Rayman2LevelSwitcher
         /// <param name="name">The level name</param>
         /// <param name="fileName">The level file name</param>
         /// <param name="type">The level type</param>
-        public Rayman2LevelViewModel(string name, string fileName, Rayman2LevelType type)
+        public LevelViewModel(string name, string fileName, LevelType type)
         {
             Name = name;
             FileName = fileName;
             Type = type;
-
-            LoadLevelCommand = new RelayCommand(LoadLevel);
         }
 
         #endregion
@@ -41,26 +39,9 @@ namespace Rayman2LevelSwitcher
         /// <summary>
         /// The level type
         /// </summary>
-        public Rayman2LevelType Type { get; }
+        public LevelType Type { get; }
 
         #endregion
 
-        #region Commands
-
-        public ICommand LoadLevelCommand { get; }
-
-        #endregion
-
-        #region Public Methods
-
-        /// <summary>
-        /// Loads the level
-        /// </summary>
-        public void LoadLevel()
-        {
-            new Rayman2Manager().ChangeLevel(FileName);
-        }
-
-        #endregion
     }
 }

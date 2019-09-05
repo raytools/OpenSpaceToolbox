@@ -26,51 +26,11 @@ namespace Rayman2LevelSwitcher
 
         #region Protected Methods
 
-        protected override (float, float, float) ReadCoordinates()
-        {
-            int processHandle = GetProcessHandle();
-            if (processHandle < 0)
-                return (0, 0, 0);
+        protected override (float, float, float) ReadPlayerCoordinates() =>
+            ReadCoordinates(PlayerCoordinatesBasePointer, PlayerCoordinatesOffsets);
 
-            int bytesReadOrWritten = 0;
-            int offXcoord = Memory.GetPointerPath(processHandle, PlayerCoordinatesBasePointer, PlayerCoordinatesOffsets);
-            int offYcoord = offXcoord + 4;
-            int offZcoord = offXcoord + 8;
-
-            byte[] xCoordBuffer = new byte[4];
-            byte[] yCoordBuffer = new byte[4];
-            byte[] zCoordBuffer = new byte[4];
-
-            Memory.ReadProcessMemory(processHandle, offXcoord, xCoordBuffer, 4, ref bytesReadOrWritten);
-            Memory.ReadProcessMemory(processHandle, offYcoord, yCoordBuffer, 4, ref bytesReadOrWritten);
-            Memory.ReadProcessMemory(processHandle, offZcoord, zCoordBuffer, 4, ref bytesReadOrWritten);
-
-            return (
-                BitConverter.ToSingle(xCoordBuffer, 0),
-                BitConverter.ToSingle(yCoordBuffer, 0),
-                BitConverter.ToSingle(zCoordBuffer, 0)
-            );
-        }
-
-        protected override void WriteCoordinates(float x, float y, float z)
-        {
-            int processHandle = GetProcessHandle();
-            if (processHandle < 0)
-                return;
-
-            int bytesReadOrWritten = 0;
-            int offXcoord = Memory.GetPointerPath(processHandle, PlayerCoordinatesBasePointer, PlayerCoordinatesOffsets);
-            int offYcoord = offXcoord + 4;
-            int offZcoord = offXcoord + 8;
-
-            byte[] xCoordBuffer = BitConverter.GetBytes(x);
-            byte[] yCoordBuffer = BitConverter.GetBytes(y);
-            byte[] zCoordBuffer = BitConverter.GetBytes(z);
-
-            Memory.WriteProcessMemory(processHandle, offXcoord, xCoordBuffer, 4, ref bytesReadOrWritten);
-            Memory.WriteProcessMemory(processHandle, offYcoord, yCoordBuffer, 4, ref bytesReadOrWritten);
-            Memory.WriteProcessMemory(processHandle, offZcoord, zCoordBuffer, 4, ref bytesReadOrWritten);
-        }
+        protected override void WritePlayerCoordinates(float x, float y, float z) =>
+            WriteCoordinates(x, y, z, PlayerCoordinatesBasePointer, PlayerCoordinatesOffsets);
 
         protected override string GetCurrentLevelName()
         {
@@ -103,6 +63,52 @@ namespace Rayman2LevelSwitcher
         #endregion
 
         #region Public Methods
+
+        public (float, float, float) ReadCoordinates(int baseAddress, params int[] offsets)
+        {
+            int processHandle = GetProcessHandle();
+            if (processHandle < 0)
+                return (0, 0, 0);
+
+            int bytesReadOrWritten = 0;
+            int offXcoord = Memory.GetPointerPath(processHandle, baseAddress, offsets);
+            int offYcoord = offXcoord + 4;
+            int offZcoord = offXcoord + 8;
+
+            byte[] xCoordBuffer = new byte[4];
+            byte[] yCoordBuffer = new byte[4];
+            byte[] zCoordBuffer = new byte[4];
+
+            Memory.ReadProcessMemory(processHandle, offXcoord, xCoordBuffer, 4, ref bytesReadOrWritten);
+            Memory.ReadProcessMemory(processHandle, offYcoord, yCoordBuffer, 4, ref bytesReadOrWritten);
+            Memory.ReadProcessMemory(processHandle, offZcoord, zCoordBuffer, 4, ref bytesReadOrWritten);
+
+            return (
+                BitConverter.ToSingle(xCoordBuffer, 0),
+                BitConverter.ToSingle(yCoordBuffer, 0),
+                BitConverter.ToSingle(zCoordBuffer, 0)
+            );
+        }
+
+        public void WriteCoordinates(float x, float y, float z, int baseAddress, params int[] offsets)
+        {
+            int processHandle = GetProcessHandle();
+            if (processHandle < 0)
+                return;
+
+            int bytesReadOrWritten = 0;
+            int offXcoord = Memory.GetPointerPath(processHandle, baseAddress, offsets);
+            int offYcoord = offXcoord + 4;
+            int offZcoord = offXcoord + 8;
+
+            byte[] xCoordBuffer = BitConverter.GetBytes(x);
+            byte[] yCoordBuffer = BitConverter.GetBytes(y);
+            byte[] zCoordBuffer = BitConverter.GetBytes(z);
+
+            Memory.WriteProcessMemory(processHandle, offXcoord, xCoordBuffer, 4, ref bytesReadOrWritten);
+            Memory.WriteProcessMemory(processHandle, offYcoord, yCoordBuffer, 4, ref bytesReadOrWritten);
+            Memory.WriteProcessMemory(processHandle, offZcoord, zCoordBuffer, 4, ref bytesReadOrWritten);
+        }
 
         public override int GetProcessHandle(bool showMessage = true)
         {
@@ -163,6 +169,32 @@ namespace Rayman2LevelSwitcher
             var buffer = new byte[] {6};
 
             Memory.WriteProcessMemory(processHandle, EngineModePointer, buffer, buffer.Length, ref bytesReadOrWritten);
+        }
+
+        public override void LoadOffsetLevel(int offset)
+        {
+            int processHandle = GetProcessHandle();
+            if (processHandle < 0)
+                return;
+
+            string levelName = CurrentLevel;
+            var lvls = Levels.ToList();
+            int currentIndex = lvls.FindIndex(x => string.Equals(x.FileName, levelName, StringComparison.CurrentCultureIgnoreCase));
+
+            if (currentIndex < 0)
+                return;
+
+            int newIndex = currentIndex + offset;
+
+            if (newIndex < 0)
+                newIndex = lvls.Count - 1;
+
+            if (newIndex >= lvls.Count)
+                newIndex = 0;
+
+            string levelToLoad = lvls[newIndex].FileName;
+
+            CurrentLevel = levelToLoad;
         }
 
         #endregion

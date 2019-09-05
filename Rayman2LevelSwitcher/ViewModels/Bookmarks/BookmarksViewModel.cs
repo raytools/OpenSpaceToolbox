@@ -20,26 +20,23 @@ namespace Rayman2LevelSwitcher
     {
         #region Constructor
 
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        /// <param name="app">The app view model</param>
-        public BookmarksViewModel(AppViewModel app)
+        public BookmarksViewModel(GenericGameManager gameManager)
         {
+            // Set properties
+            GameManager = gameManager;
+
+            BookmarkFile = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), GameManager.BookmarkFileName+".xml");
+            BookmarkItems = new ObservableCollection<BookmarkItemViewModel>();
+            AllBookmarkItems = new List<BookmarkItemViewModel>();
+
+            // Enable collection synchronization so the collection can be updated from another thread
+            BindingOperations.EnableCollectionSynchronization(BookmarkItems, this);
+
             // Create commands
             AddBookmarkCommand = new RelayCommand(AddBookmark);
             RenameBookmarkCommand = new RelayCommand(RenameBookmark);
             DeleteBookmarkCommand = new RelayCommand(DeleteBookmark);
             LoadBookmarkCommand = new RelayCommand(LoadBookmark);
-
-            // Set properties
-            BookmarkFile = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Rayman2LevelBookmarks.xml");
-            BookmarkItems = new ObservableCollection<BookmarkItemViewModel>();
-            AllBookmarkItems = new List<BookmarkItemViewModel>();
-            App = app;
-
-            // Enable collection synchronization so the collection can be updated from another thread
-            BindingOperations.EnableCollectionSynchronization(BookmarkItems, this);
 
             // Load existing bookmarks
             if (!File.Exists(BookmarkFile))
@@ -47,7 +44,7 @@ namespace Rayman2LevelSwitcher
 
             var xml = XDocument.Load(BookmarkFile);
 
-            foreach (XElement element in xml.Element(XMLHeaderName).Elements())
+            foreach (XElement element in xml.Element(GameManager.BookmarkFileName).Elements())
             {
                 // TODO: Try/catch in case of corruption
 
@@ -58,15 +55,6 @@ namespace Rayman2LevelSwitcher
 
             Task.Run(RefreshAsync);
         }
-
-        #endregion
-
-        #region Private Constant Fields
-
-        /// <summary>
-        /// The header name for the XML file
-        /// </summary>
-        private const string XMLHeaderName = "Rayman2LevelBookmarks";
 
         #endregion
 
@@ -93,7 +81,7 @@ namespace Rayman2LevelSwitcher
         /// <summary>
         /// The app view model
         /// </summary>
-        public AppViewModel App { get; }
+        public GenericGameManager GameManager { get; }
 
         /// <summary>
         /// The currently loaded level
@@ -123,7 +111,7 @@ namespace Rayman2LevelSwitcher
                     _currentLevel = value;
 
                     // Get the level and container
-                    var lvl = App.Levels.ToList().Find(x => String.Equals(x.FileName, value, StringComparison.InvariantCultureIgnoreCase));
+                    var lvl = GameManager.Levels.ToList().Find(x => String.Equals(x.FileName, value, StringComparison.InvariantCultureIgnoreCase));
 
                     if (lvl == null)
                     {
@@ -131,7 +119,7 @@ namespace Rayman2LevelSwitcher
                         return;
                     }
 
-                    var container = App.LevelContainers.ToList().Find(x => x.Levels.Contains(lvl));
+                    var container = GameManager.LevelContainers.ToList().Find(x => x.Levels.Contains(lvl));
 
                     if (container == null)
                     {
@@ -186,17 +174,15 @@ namespace Rayman2LevelSwitcher
         {
             await Task.Run(async () =>
             {
-                var manager = new Rayman2Manager();
-
                 while (true)
                 {
                     try
                     {
-                        int processHandle = manager.GetProcessHandle(false);
+                        int processHandle = GameManager.GetProcessHandle(false);
 
                         if (processHandle >= 0)
                         {
-                            string levelname = manager.GetCurrentLevelName(processHandle).ToLower();
+                            string levelname = GameManager.CurrentLevel.ToLower();
 
                             int indexOfSubLevel = levelname.IndexOf('$');
 
@@ -225,7 +211,10 @@ namespace Rayman2LevelSwitcher
         /// </summary>
         public void LoadBookmark()
         {
-            SelectedBookmark?.LoadBookmark();
+            if (SelectedBookmark == null)
+                return;
+
+            GameManager.PlayerCoordinates = (SelectedBookmark.X, SelectedBookmark.Y, SelectedBookmark.Z);
         }
 
         /// <summary>
@@ -280,12 +269,10 @@ namespace Rayman2LevelSwitcher
         /// </summary>
         public void AddBookmark()
         {
-            var manager = new Rayman2Manager();
-
-            int processHandle = manager.GetProcessHandle();
+            int processHandle = GameManager.GetProcessHandle();
             if (processHandle < 0) { return; }
 
-            string levelname = manager.GetCurrentLevelName(processHandle).ToLower();
+            string levelname = GameManager.CurrentLevel.ToLower();
 
             int indexOfSubLevel = levelname.IndexOf('$');
 
@@ -295,28 +282,14 @@ namespace Rayman2LevelSwitcher
             if (String.IsNullOrEmpty(levelname))
                 return;
 
-            var coords = manager.PlayerCoordinates;
+            var coords = GameManager.PlayerCoordinates;
 
-//            int bytesReadOrWritten = 0;
-//            int off_xcoord = Memory.GetPointerPath(processHandle, 0x500560, 0x224, 0x310, 0x34, 0x0) + 0x1ac;
-//            int off_ycoord = off_xcoord + 4;
-//            int off_zcoord = off_xcoord + 8;
-//
-//            byte[] xCoordBuffer = new byte[4];
-//            byte[] yCoordBuffer = new byte[4];
-//            byte[] zCoordBuffer = new byte[4];
-//
-//            Memory.ReadProcessMemory(processHandle, off_xcoord, xCoordBuffer, 4, ref bytesReadOrWritten);
-//            Memory.ReadProcessMemory(processHandle, off_ycoord, yCoordBuffer, 4, ref bytesReadOrWritten);
-//            Memory.ReadProcessMemory(processHandle, off_zcoord, zCoordBuffer, 4, ref bytesReadOrWritten);
-//
             const string newBookmarkName = "Bookmark";
             int newBookmarkSuffix = 0;
 
             while (AllBookmarkItems.Any(x => x.Name == $"{newBookmarkName} {newBookmarkSuffix}"))
                 newBookmarkSuffix++;
-//
-//            var bookmark = new BookmarkItemViewModel(levelname, $"{newBookmarkName} {newBookmarkSuffix}", BitConverter.ToSingle(xCoordBuffer, 0), BitConverter.ToSingle(yCoordBuffer, 0), BitConverter.ToSingle(zCoordBuffer, 0));
+
             var bookmark = new BookmarkItemViewModel(levelname, $"{newBookmarkName} {newBookmarkSuffix}", coords.Item1, coords.Item2, coords.Item3);
 
             AllBookmarkItems.Add(bookmark);
@@ -335,7 +308,7 @@ namespace Rayman2LevelSwitcher
                 AllBookmarkItems.Add(item);
             }
 
-            var headerElement = new XElement(XMLHeaderName);
+            var headerElement = new XElement(GameManager.BookmarkFileName);
 
             foreach (BookmarkItemViewModel bookmarkItem in AllBookmarkItems)
                 headerElement.Add(new XElement(bookmarkItem.Level, new XElement("Bookmark", new XElement("Name", bookmarkItem.Name), new XElement("X", bookmarkItem.X), new XElement("Y", bookmarkItem.Y), new XElement("Z", bookmarkItem.Z))));

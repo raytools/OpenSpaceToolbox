@@ -10,24 +10,44 @@ namespace Rayman2LevelSwitcher
     /// </summary>
     public class GlmWindowViewModel : BaseViewModel
     {
-        public GlmWindowViewModel()
+        #region Constructor
+
+        public GlmWindowViewModel(Rayman2GlmMonitorExtra extra)
         {
+            Extra = extra;
+
             LoadGlmPosCommand = new RelayCommand(LoadGlmPos);
             SaveGlmPosCommand = new RelayCommand(SaveGlmPos);
             ToggleLivePreviewCommand = new RelayCommand(ToggleLivePreview);
         }
 
+        #endregion
+
+        #region Commands
+
         public ICommand LoadGlmPosCommand { get; }
         public ICommand SaveGlmPosCommand { get; }
         public ICommand ToggleLivePreviewCommand { get; }
 
-        public float SavedXPosition { get; set; }
-        public float SavedYPosition { get; set; }
-        public float SavedZPosition { get; set; }
+        #endregion
+
+        #region Private Properties
+
+        private Rayman2GlmMonitorExtra Extra { get; }
 
         private float _glmX;
         private float _glmY;
         private float _glmZ;
+
+        #endregion
+
+        #region Public Properties
+
+        public bool LivePreviewEnabled { get; set; }
+
+        public float SavedXPosition { get; set; }
+        public float SavedYPosition { get; set; }
+        public float SavedZPosition { get; set; }
 
         public float GlmX
         {
@@ -63,44 +83,18 @@ namespace Rayman2LevelSwitcher
         public float GlmDeltaY { get; set; }
         public float GlmDeltaZ { get; set; }
 
-        public async Task RefreshGlmPos()
-        {
-            await Task.Run(async () =>
-            {
-                var manager = new Rayman2Manager();
+        #endregion
 
-                while (LivePreviewEnabled)
-                {
-                    try
-                    {
-                        int processHandle = manager.GetProcessHandle(false);
-
-                        if (processHandle >= 0)
-                        {
-                            GetGlmPos();
-                        }
-
-                        await Task.Delay(1000);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-                }
-                ClearGlmPos();
-            });
-        }
-
-        public bool LivePreviewEnabled { get; set; }
+        #region Private Methods
 
         private void LoadGlmPos()
         {
-            new Rayman2Manager().GlmCoordinates = (SavedXPosition, SavedYPosition, SavedZPosition);
+            Extra.GlmCoordinates = (SavedXPosition, SavedYPosition, SavedZPosition);
         }
 
         private void SaveGlmPos()
         {
-            var coords = new Rayman2Manager().GlmCoordinates;
+            var coords = Extra.GlmCoordinates;
             SavedXPosition = coords.Item1;
             SavedYPosition = coords.Item2;
             SavedZPosition = coords.Item3;
@@ -108,7 +102,7 @@ namespace Rayman2LevelSwitcher
 
         private void GetGlmPos()
         {
-            var coords = new Rayman2Manager().GlmCoordinates;
+            var coords = Extra.GlmCoordinates;
             GlmX = coords.Item1;
             GlmY = coords.Item2;
             GlmZ = coords.Item3;
@@ -129,5 +123,37 @@ namespace Rayman2LevelSwitcher
             if (LivePreviewEnabled)
                 Task.Run(RefreshGlmPos);
         }
+
+        #endregion
+
+        #region Public Methods
+        public async Task RefreshGlmPos()
+        {
+            await Task.Run(async () =>
+            {
+                while (LivePreviewEnabled)
+                {
+                    try
+                    {
+                        int processHandle = Extra.GameManager.GetProcessHandle(false);
+
+                        if (processHandle >= 0)
+                        {
+                            GetGlmPos();
+                        }
+
+                        await Task.Delay(1000);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+                ClearGlmPos();
+            });
+        }
+
+        #endregion
+        
     }
 }

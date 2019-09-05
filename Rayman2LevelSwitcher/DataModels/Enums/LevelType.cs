@@ -3,7 +3,7 @@
     /// <summary>
     /// The type of Rayman 2 level
     /// </summary>
-    public enum Rayman2LevelType
+    public enum LevelType
     {
         /// <summary>
         /// A playable level

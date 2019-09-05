@@ -73,7 +73,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\IsValidIndexConverter.cs" />
-    <Compile Include="GameManager\Games\Rayman2GameManager.cs" />
+    <Compile Include="GameManager\Extras\ExtraAction.cs" />
+    <Compile Include="GameManager\Extras\OpenspaceExtraAction.cs" />
+    <Compile Include="GameManager\Games\Rayman2\Rayman2GameManager.cs" />
+    <Compile Include="GameManager\Games\Rayman2\Rayman2GlmMonitorExtra.cs" />
+    <Compile Include="GameManager\Games\Rayman2\Rayman2NoHpExtra.cs" />
+    <Compile Include="GameManager\Games\Rayman2\Rayman2VoidExtra.cs" />
     <Compile Include="GameManager\GenericGameManager.cs" />
     <Compile Include="GameManager\OpenspaceGameManager.cs" />
     <Compile Include="Helpers\WindowProperties.cs" />
@@ -86,15 +91,13 @@
     <Compile Include="Helpers\WPF\Command\RelayCommand.cs" />
     <Compile Include="Extensions\VisualExtensions.cs" />
     <Compile Include="Helpers\WPF\CommonCommands.cs" />
-    <Compile Include="ViewModels\AppViewModel.cs" />
     <Compile Include="ViewModels\Bookmarks\BookmarkItemViewModel.cs" />
-    <Compile Include="DataModels\Enums\Rayman2LevelType.cs" />
+    <Compile Include="DataModels\Enums\LevelType.cs" />
     <Compile Include="ViewModels\GlmWindowViewModel.cs" />
-    <Compile Include="ViewModels\Levels\Rayman2LevelViewModel.cs" />
-    <Compile Include="ViewModels\Levels\Rayman2LevelContainerViewModel.cs" />
+    <Compile Include="ViewModels\Levels\LevelViewModel.cs" />
+    <Compile Include="ViewModels\Levels\LevelContainerViewModel.cs" />
     <Compile Include="ViewModels\Bookmarks\BookmarksViewModel.cs" />
     <Compile Include="ViewModels\GameManagerViewModel.cs" />
-    <Compile Include="GameManager\Rayman2Manager.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Views\GameManagerFullView.xaml.cs">
       <DependentUpon>GameManagerFullView.xaml</DependentUpon>
@@ -182,9 +185,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GameManager\Extras\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

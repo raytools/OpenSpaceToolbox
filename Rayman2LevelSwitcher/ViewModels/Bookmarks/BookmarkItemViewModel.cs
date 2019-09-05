@@ -55,16 +55,5 @@
 
         #endregion
 
-        #region Public Methods
-
-        /// <summary>
-        /// Loads the bookmark
-        /// </summary>
-        public void LoadBookmark()
-        {
-            new Rayman2Manager().PlayerCoordinates = (X, Y, Z);
-        }
-
-        #endregion
     }
 }

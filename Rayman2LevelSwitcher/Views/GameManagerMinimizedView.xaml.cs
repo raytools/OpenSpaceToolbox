@@ -16,13 +16,15 @@ namespace Rayman2LevelSwitcher
         private void BookmarkListItemDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (DataContext is MainViewModel viewModel)
-                viewModel.BookmarksVm.SelectedBookmark?.LoadBookmark();
+                viewModel.GameManager.PlayerCoordinates = (viewModel.BookmarksVm.SelectedBookmark.X,
+                    viewModel.BookmarksVm.SelectedBookmark.Y, viewModel.BookmarksVm.SelectedBookmark.Z);
         }
 
         private void LevelTreeItemDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (sender is TreeViewItem item && item.DataContext is Rayman2LevelViewModel lvl)
-                lvl.LoadLevel();
+            if (sender is TreeViewItem item && item.DataContext is LevelViewModel lvl &&
+                DataContext is MainViewModel viewModel)
+                viewModel.GameManager.CurrentLevel = lvl.FileName;
         }
     }
 }

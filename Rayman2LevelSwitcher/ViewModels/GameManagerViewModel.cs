@@ -12,24 +12,17 @@ namespace Rayman2LevelSwitcher
     {
         #region Constructor
 
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        /// <param name="app">The app view model</param>
-        public GameManagerViewModel(AppViewModel app)
+        public GameManagerViewModel(GenericGameManager gameManager)
         {
+            // Create the properties
+            Random = new Random();
+            GameManager = gameManager;
+
             // Create the commands
             LoadSavedPositionCommand = new RelayCommand(LoadSavedPosition);
             SavePositionCommand = new RelayCommand(SavePosition);
-            ActivateVoidCommand = new RelayCommand(() => new Rayman2Manager().ActivateVoid());
-            ActivateNoHealthCommand = new RelayCommand(() => new Rayman2Manager().ActivateNoHealth());
-            ReloadLevelCommand = new RelayCommand(() => new Rayman2Manager().ReloadLevel());
+            ReloadLevelCommand = new RelayCommand(() => GameManager.ReloadLevel());
             LoadRandomLevelCommand = new RelayCommand(LoadRandomLevel);
-            ShowGlmWindowCommand = new RelayCommand(ShowGlmWindow);
-
-            // Create the properties
-            Random = new Random();
-            App = app;
         }
 
         #endregion
@@ -57,9 +50,9 @@ namespace Rayman2LevelSwitcher
         public Random Random { get; }
 
         /// <summary>
-        /// The app view model
+        /// The game manager
         /// </summary>
-        public AppViewModel App { get; }
+        public GenericGameManager GameManager { get; }
 
         #endregion
 
@@ -69,15 +62,9 @@ namespace Rayman2LevelSwitcher
 
         public ICommand ReloadLevelCommand { get; }
 
-        public ICommand ActivateNoHealthCommand { get; }
-
-        public ICommand ActivateVoidCommand { get; }
-
         public ICommand LoadSavedPositionCommand { get; }
 
         public ICommand SavePositionCommand { get; }
-
-        public ICommand ShowGlmWindowCommand { get; }
 
         #endregion
 
@@ -88,8 +75,8 @@ namespace Rayman2LevelSwitcher
         /// </summary>
         public void LoadRandomLevel()
         {
-            var lvls = App.Levels.Where(x => x.Type == Rayman2LevelType.Level).ToList();
-            new Rayman2Manager().ChangeLevel(lvls[Random.Next(lvls.Count - 1)].FileName);
+            var lvls = GameManager.Levels.Where(x => x.Type == LevelType.Level).ToList();
+            GameManager.CurrentLevel = lvls[Random.Next(lvls.Count - 1)].FileName;
         }
 
         /// <summary>
@@ -98,33 +85,7 @@ namespace Rayman2LevelSwitcher
         /// <param name="offset">The offset</param>
         public void LoadOffsetLevel(int offset)
         {
-            var manager = new Rayman2Manager();
-
-            int processHandle = manager.GetProcessHandle();
-
-            if (processHandle < 0)
-                return;
-
-            string levelName = manager.GetCurrentLevelName(processHandle);
-
-            var lvls = App.Levels.ToList();
-
-            int currentIndex = lvls.FindIndex(x => string.Equals(x.FileName, levelName, StringComparison.CurrentCultureIgnoreCase));
-
-            if (currentIndex < 0)
-                return;
-
-            int newIndex = currentIndex + offset;
-
-            if (newIndex < 0)
-                newIndex = lvls.Count - 1;
-
-            if (newIndex >= lvls.Count)
-                newIndex = 0;
-
-            string levelToLoad = lvls[newIndex].FileName;
-
-            manager.ChangeLevel(levelToLoad);
+            GameManager.LoadOffsetLevel(offset);
         }
 
         /// <summary>
@@ -132,7 +93,7 @@ namespace Rayman2LevelSwitcher
         /// </summary>
         public void LoadSavedPosition()
         {
-            new Rayman2Manager().PlayerCoordinates = (SavedXPosition, SavedYPosition, SavedZPosition);
+            GameManager.PlayerCoordinates = (SavedXPosition, SavedYPosition, SavedZPosition);
         }
 
         /// <summary>
@@ -140,22 +101,10 @@ namespace Rayman2LevelSwitcher
         /// </summary>
         public void SavePosition()
         {
-            var coords = new Rayman2Manager().PlayerCoordinates;
+            var coords = GameManager.PlayerCoordinates;
             SavedXPosition = coords.Item1;
             SavedYPosition = coords.Item2;
             SavedZPosition = coords.Item3;
-        }
-
-        /// <summary>
-        /// Show the GLM Monitor 2000 window
-        /// </summary>
-        public void ShowGlmWindow()
-        {
-            GlmWindow glmWindow = new GlmWindow
-            {
-                Owner = Application.Current.MainWindow
-            };
-            glmWindow.Show();
         }
 
         #endregion

@@ -9,24 +9,26 @@ namespace Rayman2LevelSwitcher
     {
         #region Constructor
 
-        public MainViewModel()
+        public MainViewModel(GenericGameManager gameManager)
         {
+            GameManager = gameManager;
             // Instantiate view models
-            AppVm = new AppViewModel();
-            GameManagerVm = new GameManagerViewModel(AppVm);
-            BookmarksVm = new BookmarksViewModel(AppVm);
+            GameManagerVm = new GameManagerViewModel(GameManager);
+            BookmarksVm = new BookmarksViewModel(GameManager);
             
             // Create commands
             ToggleMinimizedUiCommand = new RelayCommand(ToggleMinimizedUi);
 
             // Set full UI as default
             CurrentView = new GameManagerFullView();
+            WindowProperties = new WindowProperties {Width = 640, Height = 480, ResizeMode = ResizeMode.CanResize};
 
             // Setup keyboard hook
             GlobalKeyboardHook = new GlobalKeyboardHook();
             GlobalKeyboardHook.KeyboardPressed += OnKeyPressed;
 
-            WindowProperties = new WindowProperties {Width = 640, Height = 480, ResizeMode = ResizeMode.CanResize};
+            HotkeysToggleTooltip =
+                "Enables hotkeys:\nR - reload level\nK - previous level\nL - next level\nP - save position\nO - load position\nB - add bookmark";
         }
 
         #endregion
@@ -35,9 +37,7 @@ namespace Rayman2LevelSwitcher
 
         public void OnKeyPressed(object sender, GlobalKeyboardHookEventArgs e)
         {
-            var manager = new Rayman2Manager();
-
-            if (!AppVm.HotkeysEnabled || manager.IsGamePaused() || !manager.IsGameFocused() && !Application.Current.MainWindow.IsActive)
+            if (!HotkeysEnabled || GameManager.IsGamePaused() || !GameManager.IsGameFocused() && !Application.Current.MainWindow.IsActive)
             {
                 e.Handled = false;
                 return;
@@ -70,7 +70,7 @@ namespace Rayman2LevelSwitcher
                     break;
                 // R for reload level
                 case 0x52:
-                    manager.ReloadLevel();
+                    GameManager.ReloadLevel();
                     break;
                 // B to add bookmark
                 case 0x42:
@@ -100,7 +100,7 @@ namespace Rayman2LevelSwitcher
 
         #region Public Properties
 
-        public AppViewModel AppVm { get; }
+        public GenericGameManager GameManager { get; }
 
         public GameManagerViewModel GameManagerVm { get; }
 
@@ -109,6 +109,10 @@ namespace Rayman2LevelSwitcher
         public UserControl CurrentView { get; set; }
 
         public WindowProperties WindowProperties { get; }
+        
+        public bool HotkeysEnabled { get; set; }
+
+        public string HotkeysToggleTooltip { get; }
 
         #endregion
 

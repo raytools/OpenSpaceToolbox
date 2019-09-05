@@ -1,4 +1,7 @@
-﻿namespace Rayman2LevelSwitcher
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+
+namespace Rayman2LevelSwitcher
 {
     /// <summary>
     /// Generic game manager.
@@ -23,13 +26,18 @@
         public string WindowName { get; protected set; }
 
         /// <summary>
+        /// Filename used to save level bookmarks.
+        /// </summary>
+        public string BookmarkFileName { get; protected set; }
+
+        /// <summary>
         /// Player coordinates tuple.
-        /// Retrieving and writing values to the memory should be handled in functions: ReadCoordinates and WriteCoordinates.
+        /// Retrieving and writing values to the memory should be handled in functions: ReadPlayerCoordinates and WritePlayerCoordinates.
         /// </summary>
         public (float, float, float) PlayerCoordinates
         {
-            get => ReadCoordinates();
-            set => WriteCoordinates(value.Item1, value.Item2, value.Item3);
+            get => ReadPlayerCoordinates();
+            set => WritePlayerCoordinates(value.Item1, value.Item2, value.Item3);
         }
 
         /// <summary>
@@ -42,6 +50,12 @@
             set => ChangeLevel(value);
         }
 
+        public ObservableCollection<ExtraAction> ExtraActions { get; protected set; }
+
+        public ObservableCollection<LevelContainerViewModel> LevelContainers { get; protected set; }
+
+        public IEnumerable<LevelViewModel> Levels { get; protected set; }
+
         #endregion
 
         #region Protected Methods
@@ -50,7 +64,7 @@
         /// Reads player coordinates from the game memory.
         /// </summary>
         /// <returns></returns>
-        protected abstract (float, float, float) ReadCoordinates();
+        protected abstract (float, float, float) ReadPlayerCoordinates();
 
         /// <summary>
         /// Writes player coordinates from the game memory.
@@ -58,7 +72,7 @@
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        protected abstract void WriteCoordinates(float x, float y, float z);
+        protected abstract void WritePlayerCoordinates(float x, float y, float z);
 
         /// <summary>
         /// Get current level name from the game memory.
@@ -99,6 +113,8 @@
         /// Reloads the current level.
         /// </summary>
         public abstract void ReloadLevel();
+
+        public abstract void LoadOffsetLevel(int offset);
 
         #endregion
     }

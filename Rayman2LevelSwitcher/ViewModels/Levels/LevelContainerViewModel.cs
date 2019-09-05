@@ -5,14 +5,14 @@ namespace Rayman2LevelSwitcher
     /// <summary>
     /// View model for a Rayman 2 level container
     /// </summary>
-    public class Rayman2LevelContainerViewModel : BaseViewModel
+    public class LevelContainerViewModel : BaseViewModel
     {
         /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="name">The container name</param>
         /// <param name="levels">The contained levels</param>
-        public Rayman2LevelContainerViewModel(string name, ObservableCollection<Rayman2LevelViewModel> levels)
+        public LevelContainerViewModel(string name, ObservableCollection<LevelViewModel> levels)
         {
             Name = name;
             Levels = levels;
@@ -26,7 +26,7 @@ namespace Rayman2LevelSwitcher
         /// <summary>
         /// The contained levels
         /// </summary>
-        public ObservableCollection<Rayman2LevelViewModel> Levels { get; }
+        public ObservableCollection<LevelViewModel> Levels { get; }
 
     }
 }

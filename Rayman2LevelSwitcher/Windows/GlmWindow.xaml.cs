@@ -7,18 +7,18 @@ namespace Rayman2LevelSwitcher
     /// </summary>
     public partial class GlmWindow : Window
     {
-        public GlmWindow()
+        public GlmWindow(GlmWindowViewModel viewModel)
         {
             InitializeComponent();
 
-            DataContext = GlmWindowVM = new GlmWindowViewModel();
+            DataContext = ViewModel = viewModel;
         }
 
-        private GlmWindowViewModel GlmWindowVM { get; }
+        private GlmWindowViewModel ViewModel { get; }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            GlmWindowVM.LivePreviewEnabled = false;
+            ViewModel.LivePreviewEnabled = false;
         }
     }
 }
