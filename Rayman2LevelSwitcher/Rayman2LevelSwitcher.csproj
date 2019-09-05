@@ -75,6 +75,8 @@
     <Compile Include="Converters\IsValidIndexConverter.cs" />
     <Compile Include="GameManager\Extras\ExtraAction.cs" />
     <Compile Include="GameManager\Extras\OpenspaceExtraAction.cs" />
+    <Compile Include="GameManager\Games\Donald\DonaldGameManager.cs" />
+    <Compile Include="GameManager\Games\Donald\DonaldLivesExtra.cs" />
     <Compile Include="GameManager\Games\Rayman2\Rayman2GameManager.cs" />
     <Compile Include="GameManager\Games\Rayman2\Rayman2GlmMonitorExtra.cs" />
     <Compile Include="GameManager\Games\Rayman2\Rayman2NoHpExtra.cs" />

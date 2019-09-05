@@ -9,7 +9,7 @@ namespace Rayman2LevelSwitcher
     {
         private void ApplicationStartup(object sender, StartupEventArgs e)
         {
-            MainWindow = new MainWindow(new MainViewModel(new Rayman2GameManager()));
+            MainWindow = new MainWindow(new MainViewModel(new DonaldGameManager()));
             MainWindow.Show();
         }
     }
