@@ -1,4 +1,4 @@
-#OpenSpace Toolbox
+# OpenSpace Toolbox
 Toolbox for OpenSpace (PC) Games
 
 Most prominent features are:
@@ -8,7 +8,7 @@ Most prominent features are:
 
 Games can have additional, game-specific features
 
-##Currently supported games
+## Currently supported games
 * Rayman 2
 * Donald Duck Goin' Quackers/Quack Attack)
 
