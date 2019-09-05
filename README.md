@@ -9,8 +9,8 @@ Most prominent features are:
 Games can have additional, game-specific features
 
 ## Currently supported games
-* Rayman 2
-* Donald Duck Goin' Quackers/Quack Attack)
+* Rayman 2: The Great Escape (GOG version)
+* Donald Duck Goin' Quackers (Quack Attack)
 
 Feel free to copy, edit and distribute.
 Made by Robin.
