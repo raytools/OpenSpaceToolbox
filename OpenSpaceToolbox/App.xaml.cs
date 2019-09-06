@@ -10,34 +10,20 @@ namespace OpenSpaceToolbox
     {
         private void ApplicationStartup(object sender, StartupEventArgs e)
         {
-            var game = ChooseGame();
-
-            if (game != null)
-            {
-                MainWindow = new MainWindow(new MainViewModel(game));
-                MainWindow.Show();
-            }
-            else Shutdown();
-        }
-
-        private GenericGameManager ChooseGame()
-        {
             GameChooserViewModel gameChooserViewModel = new GameChooserViewModel();
-            GameChooser gameChooser = new GameChooser(gameChooserViewModel)
+            Window gameChooser = new GameChooser(gameChooserViewModel)
             {
                 WindowStartupLocation = WindowStartupLocation.CenterScreen
             };
             gameChooser.ShowDialog();
 
-            if (gameChooserViewModel.SelectedGame == null)
-                return null;
+            if (gameChooserViewModel.SelectedGame == null) return;
 
             var game = Activator.CreateInstance(gameChooserViewModel.SelectedGame.Class);
+            if (!(game is GenericGameManager gameManager)) return;
 
-            if (game is GenericGameManager gameManager)
-                return gameManager;
-
-            return null;
+            MainWindow = new MainWindow(new MainViewModel(gameManager));
+            MainWindow.Show();
         }
     }
 }

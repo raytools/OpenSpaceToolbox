@@ -41,7 +41,6 @@ namespace OpenSpaceToolbox
         {
             ViewModel.Dispose();
             ViewModel.BookmarksVm.SaveBookmarks();
-            Application.Current.Shutdown();
         }
 
         #endregion

@@ -19,7 +19,7 @@ namespace OpenSpaceToolbox
         private void ProcessItem(object sender, RoutedEventArgs e)
         {
             ViewModel.SelectGame();
-            Close();
+            Hide();
         }
     }
 }
