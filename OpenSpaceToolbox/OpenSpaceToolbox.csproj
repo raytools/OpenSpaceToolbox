@@ -51,6 +51,16 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseFull|AnyCPU'">
+    <OutputPath>..\bin\ReleaseFull\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>none</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -72,38 +82,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Converters\IsValidIndexConverter.cs" />
-    <Compile Include="DataModels\GameItem.cs" />
-    <Compile Include="DataModels\GameList.cs" />
     <Compile Include="Windows\GameChooser.xaml.cs">
       <DependentUpon>GameChooser.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GameManager\Extras\ExtraAction.cs" />
-    <Compile Include="GameManager\Extras\OpenspaceExtraAction.cs" />
-    <Compile Include="GameManager\Games\Donald\DonaldGameManager.cs" />
-    <Compile Include="GameManager\Games\Donald\DonaldLivesExtra.cs" />
-    <Compile Include="GameManager\Games\Rayman2\Rayman2GameManager.cs" />
-    <Compile Include="GameManager\Games\Rayman2\Rayman2GlmMonitorExtra.cs" />
-    <Compile Include="GameManager\Games\Rayman2\Rayman2NoHpExtra.cs" />
-    <Compile Include="GameManager\Games\Rayman2\Rayman2VoidExtra.cs" />
-    <Compile Include="GameManager\GenericGameManager.cs" />
-    <Compile Include="GameManager\OpenspaceGameManager.cs" />
-    <Compile Include="Helpers\WindowProperties.cs" />
-    <Compile Include="Helpers\WPF\BaseValueConverter.cs" />
-    <Compile Include="Helpers\WPF\BindingProxy.cs" />
-    <Compile Include="Helpers\WPF\Command\AsyncRelayCommand.cs" />
-    <Compile Include="Helpers\WPF\Command\BaseRelayCommand.cs" />
-    <Compile Include="Helpers\GlobalKeyboardHookEventArgs.cs" />
-    <Compile Include="Helpers\WPF\BaseViewModel.cs" />
-    <Compile Include="Helpers\WPF\Command\RelayCommand.cs" />
-    <Compile Include="Extensions\VisualExtensions.cs" />
-    <Compile Include="Helpers\WPF\CommonCommands.cs" />
     <Compile Include="ViewModels\Bookmarks\BookmarkItemViewModel.cs" />
-    <Compile Include="DataModels\Enums\LevelType.cs" />
     <Compile Include="ViewModels\GameChooserViewModel.cs" />
-    <Compile Include="ViewModels\GlmWindowViewModel.cs" />
-    <Compile Include="ViewModels\Levels\LevelViewModel.cs" />
-    <Compile Include="ViewModels\Levels\LevelContainerViewModel.cs" />
     <Compile Include="ViewModels\Bookmarks\BookmarksViewModel.cs" />
     <Compile Include="ViewModels\GameManagerViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
@@ -112,9 +95,6 @@
     </Compile>
     <Compile Include="Views\GameManagerMinimizedView.xaml.cs">
       <DependentUpon>GameManagerMinimizedView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\GlmWindow.xaml.cs">
-      <DependentUpon>GlmWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\RenameDialog.xaml.cs">
       <DependentUpon>RenameDialog.xaml</DependentUpon>
@@ -131,10 +111,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\GlmWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -143,7 +119,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Helpers\GlobalKeyboardHook.cs" />
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -154,7 +129,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\Memory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -164,19 +138,16 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Costura.Fody">
-      <Version>4.0.0</Version>
-    </PackageReference>
     <PackageReference Include="Fody">
-      <Version>5.1.1</Version>
+      <Version>6.0.0</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="gong-wpf-dragdrop">
-      <Version>2.0.4</Version>
+      <Version>2.1.0</Version>
     </PackageReference>
     <PackageReference Include="PropertyChanged.Fody">
-      <Version>3.0.1</Version>
+      <Version>3.1.3</Version>
     </PackageReference>
     <PackageReference Include="System.ValueTuple">
       <Version>4.5.0</Version>
@@ -197,7 +168,12 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\OpenSpaceCore\OpenSpaceCore.csproj">
+      <Project>{4f0ec808-87a7-4bfc-ac03-2090c7eec0fd}</Project>
+      <Name>OpenSpaceCore</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

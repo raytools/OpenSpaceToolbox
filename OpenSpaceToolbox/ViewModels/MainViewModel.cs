@@ -2,6 +2,10 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using OpenSpaceCore.GameManager;
+using OpenSpaceCore.Helpers;
+using OpenSpaceCore.Helpers.WPF;
+using OpenSpaceCore.Helpers.WPF.Command;
 
 namespace OpenSpaceToolbox
 {

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
+using OpenSpaceCore.DataModels;
+using OpenSpaceCore.GameManager;
 
 namespace OpenSpaceToolbox
 {
@@ -10,6 +13,9 @@ namespace OpenSpaceToolbox
     {
         private void ApplicationStartup(object sender, StartupEventArgs e)
         {
+            Directory.CreateDirectory(ProgramPaths.Games);
+            Directory.CreateDirectory(ProgramPaths.Bookmarks);
+
             GameChooserViewModel gameChooserViewModel = new GameChooserViewModel();
             Window gameChooser = new GameChooser(gameChooserViewModel)
             {
@@ -19,10 +25,7 @@ namespace OpenSpaceToolbox
 
             if (gameChooserViewModel.SelectedGame == null) return;
 
-            var game = Activator.CreateInstance(gameChooserViewModel.SelectedGame.Class);
-            if (!(game is GenericGameManager gameManager)) return;
-
-            MainWindow = new MainWindow(new MainViewModel(gameManager));
+            MainWindow = new MainWindow(new MainViewModel(gameChooserViewModel.SelectedGame.Class));
             MainWindow.Show();
         }
     }

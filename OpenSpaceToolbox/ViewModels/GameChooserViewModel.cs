@@ -1,4 +1,7 @@
-﻿namespace OpenSpaceToolbox
+﻿using OpenSpaceCore.DataModels;
+using OpenSpaceCore.Helpers.WPF;
+
+namespace OpenSpaceToolbox
 {
     public class GameChooserViewModel : BaseViewModel
     {

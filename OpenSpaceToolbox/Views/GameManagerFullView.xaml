@@ -5,6 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OpenSpaceToolbox"
              xmlns:dd="urn:gong-wpf-dragdrop"
+             xmlns:wpf="clr-namespace:OpenSpaceCore.Helpers.WPF;assembly=OpenSpaceCore"
+             xmlns:extras="clr-namespace:OpenSpaceCore.GameManager.Extras;assembly=OpenSpaceCore"
+             xmlns:converters="clr-namespace:OpenSpaceCore.Converters;assembly=OpenSpaceCore"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="640"
              d:DataContext="{d:DesignInstance local:MainViewModel}">
@@ -24,17 +27,17 @@
             <MenuItem Header="File">
                 <MenuItem Header="Exit"
                           InputGestureText="Alt+F4"
-                          Command="{x:Static local:CommonCommands.CloseAppCommand}" />
+                          Command="{x:Static wpf:CommonCommands.CloseAppCommand}" />
             </MenuItem>
 
             <MenuItem Header="Extras" ItemsSource="{Binding GameManager.ExtraActions}">
                 <MenuItem.ItemContainerStyle>
                     <Style TargetType="{x:Type MenuItem}">
-                        <Setter Property="Command" Value="{Binding ExecuteActionCommand}" />
+                        <Setter Property="Command" Value="{Binding Path=ExecuteActionCommand}" />
                     </Style>
                 </MenuItem.ItemContainerStyle>
                 <MenuItem.ItemTemplate>
-                    <HierarchicalDataTemplate DataType="{x:Type local:ExtraAction}">
+                    <HierarchicalDataTemplate DataType="{x:Type extras:ExtraAction}">
                         <TextBlock Text="{Binding Name}"></TextBlock>
                     </HierarchicalDataTemplate>
                 </MenuItem.ItemTemplate>
@@ -200,7 +203,7 @@
                         <Button Content="Load Bookmark"
                                 Margin="0 0 10 0"
                                 Command="{Binding Path=BookmarksVm.LoadBookmarkCommand}"
-                                IsEnabled="{Binding Path=BookmarksVm.SelectedBookmarkIndex, Converter={local:IsValidIndexConverter}}"/>
+                                IsEnabled="{Binding Path=BookmarksVm.SelectedBookmarkIndex, Converter={converters:IsValidIndexConverter}}"/>
 
                         <Button Content="Add"
                                 Margin="0 0 10 0"
@@ -210,12 +213,12 @@
                         <Button Content="Rename"
                                 Margin="0 0 10 0"
                                 Command="{Binding Path=BookmarksVm.RenameBookmarkCommand}"
-                                IsEnabled="{Binding Path=BookmarksVm.SelectedBookmarkIndex, Converter={local:IsValidIndexConverter}}"/>
+                                IsEnabled="{Binding Path=BookmarksVm.SelectedBookmarkIndex, Converter={converters:IsValidIndexConverter}}"/>
 
                         <Button Content="Delete"
                                 Margin="0 0 10 0"
                                 Command="{Binding Path=BookmarksVm.DeleteBookmarkCommand}" 
-                                IsEnabled="{Binding Path=BookmarksVm.SelectedBookmarkIndex, Converter={local:IsValidIndexConverter}}"/>
+                                IsEnabled="{Binding Path=BookmarksVm.SelectedBookmarkIndex, Converter={converters:IsValidIndexConverter}}"/>
 
                     </WrapPanel>
 

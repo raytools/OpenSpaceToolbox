@@ -40,7 +40,10 @@
         </ListBox>
         <WrapPanel Grid.Row="2"
                    HorizontalAlignment="Right">
-            <Button Content="OK" Width="60" Click="ProcessItem" />
+            <Button Content="OK"
+                    Width="60"
+                    Click="ProcessItem"
+                    IsEnabled="{Binding Path=GameList.Games.Count}" />
         </WrapPanel>
     </Grid>
 </Window>

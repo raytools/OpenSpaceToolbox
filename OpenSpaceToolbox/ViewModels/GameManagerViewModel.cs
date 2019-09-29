@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Linq;
-using System.Windows;
 using System.Windows.Input;
+using OpenSpaceCore.DataModels.Enums;
+using OpenSpaceCore.GameManager;
+using OpenSpaceCore.Helpers.WPF;
+using OpenSpaceCore.Helpers.WPF.Command;
 
 namespace OpenSpaceToolbox
 {

@@ -1,4 +1,6 @@
-﻿namespace OpenSpaceToolbox
+﻿using OpenSpaceCore.Helpers.WPF;
+
+namespace OpenSpaceToolbox
 {
     /// <summary>
     /// View model for a bookmark item

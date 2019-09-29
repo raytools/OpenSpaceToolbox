@@ -10,6 +10,10 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml.Linq;
+using OpenSpaceCore.DataModels;
+using OpenSpaceCore.GameManager;
+using OpenSpaceCore.Helpers.WPF;
+using OpenSpaceCore.Helpers.WPF.Command;
 
 namespace OpenSpaceToolbox
 {
@@ -25,7 +29,7 @@ namespace OpenSpaceToolbox
             // Set properties
             GameManager = gameManager;
 
-            BookmarkFile = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), GameManager.BookmarkFileName+".xml");
+            BookmarkFile = Path.Combine(ProgramPaths.Bookmarks, GameManager.BookmarkFileName+".xml");
             BookmarkItems = new ObservableCollection<BookmarkItemViewModel>();
             AllBookmarkItems = new List<BookmarkItemViewModel>();
 
