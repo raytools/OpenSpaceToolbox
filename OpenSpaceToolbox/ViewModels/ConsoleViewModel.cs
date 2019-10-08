@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Linq;
 using System.Windows.Input;
 using OpenSpaceCore.GameManager;
 using OpenSpaceCore.Helpers.WPF;
@@ -13,12 +12,12 @@ namespace OpenSpaceToolbox
 
         public ConsoleViewModel(GenericGameManager gameManager)
         {
-            GameManager = gameManager;
+            ConsoleManager = new ConsoleCommandManager(gameManager);
 
             ExecutePromptCommand = new RelayCommand(ExecutePrompt);
             ClearCommand = new RelayCommand(Clear);
 
-            Log = string.Empty;
+            Log += ConsoleManager.Execute("version") + '\n';
         }
 
         #endregion
@@ -33,7 +32,7 @@ namespace OpenSpaceToolbox
 
         #region Public Properties
 
-        public GenericGameManager GameManager { get; }
+        public ConsoleCommandManager ConsoleManager { get; }
 
         public string Log { get; set; }
 
@@ -45,7 +44,11 @@ namespace OpenSpaceToolbox
 
         public void ExecutePrompt()
         {
-            Log += Prompt + '\n';
+            Log += $"> {Prompt}\n";
+
+            string[] args = Prompt.Split(' ');
+            Log += ConsoleManager.Execute(args[0], args.Skip(1).ToArray()) + '\n';
+
             Prompt = string.Empty;
         }
 

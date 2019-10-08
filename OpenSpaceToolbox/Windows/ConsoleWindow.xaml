@@ -31,6 +31,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBox Grid.Column="0"
                      FontFamily="Courier New"
@@ -42,6 +43,9 @@
                 </TextBox.InputBindings>
             </TextBox>
             <Button Grid.Column="1"
+                    Content="==>"
+                    Command="{Binding Path=ExecutePromptCommand}"/>
+            <Button Grid.Column="2"
                     Content="Clear"
                     Command="{Binding Path=ClearCommand}"/>
         </Grid>

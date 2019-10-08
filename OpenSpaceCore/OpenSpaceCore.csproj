@@ -67,6 +67,7 @@
     <Compile Include="GameManager\Extras\OpenspaceExtraAction.cs" />
     <Compile Include="GameManager\GenericGameManager.cs" />
     <Compile Include="GameManager\OpenspaceGameManager.cs" />
+    <Compile Include="Helpers\AppInfo.cs" />
     <Compile Include="Helpers\GlobalKeyboardHook.cs" />
     <Compile Include="Helpers\GlobalKeyboardHookEventArgs.cs" />
     <Compile Include="Helpers\Memory.cs" />
