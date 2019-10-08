@@ -52,6 +52,9 @@
                           Command="{Binding Path=ToggleMinimizedUiCommand}"></MenuItem>
             </MenuItem>
 
+            <MenuItem Header="Console"
+                      Command="{Binding Path=ShowConsoleWindowCommand}"/>
+
         </Menu>
 
         <Grid Grid.Row="1"

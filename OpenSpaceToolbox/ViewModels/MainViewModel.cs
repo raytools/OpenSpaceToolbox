@@ -22,6 +22,7 @@ namespace OpenSpaceToolbox
             
             // Create commands
             ToggleMinimizedUiCommand = new RelayCommand(ToggleMinimizedUi);
+            ShowConsoleWindowCommand = new RelayCommand(ShowConsoleWindow);
 
             // Set full UI as default
             CurrentView = new GameManagerFullView();
@@ -94,11 +95,15 @@ namespace OpenSpaceToolbox
 
         public ICommand ToggleMinimizedUiCommand { get; }
 
+        public ICommand ShowConsoleWindowCommand { get; }
+
         #endregion
 
         #region Private Properties
 
         private GlobalKeyboardHook GlobalKeyboardHook { get; }
+
+        private ConsoleWindow ConsoleWindow { get; set; }
 
         #endregion
 
@@ -120,6 +125,12 @@ namespace OpenSpaceToolbox
 
         #endregion
 
+        #region Private Methods
+
+        private void ConsoleWindowClosed(object sender, EventArgs e) => ConsoleWindow = null;
+
+        #endregion
+
         #region Public Methods
 
         public void ToggleMinimizedUi()
@@ -137,6 +148,20 @@ namespace OpenSpaceToolbox
                 WindowProperties.ResizeMode = ResizeMode.CanResize;
             }
 
+        }
+
+        public void ShowConsoleWindow()
+        {
+            if (ConsoleWindow == null)
+            {
+                ConsoleWindow = new ConsoleWindow(new ConsoleViewModel(GameManager))
+                {
+                    Owner = Application.Current.MainWindow
+                };
+                ConsoleWindow.Closed += ConsoleWindowClosed;
+                ConsoleWindow.Show();
+            }
+            else ConsoleWindow.Focus();
         }
 
         public void Dispose()

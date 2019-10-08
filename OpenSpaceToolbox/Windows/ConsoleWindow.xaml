@@ -1,0 +1,49 @@
+﻿<Window x:Class="OpenSpaceToolbox.ConsoleWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OpenSpaceToolbox"
+        mc:Ignorable="d"
+        MinHeight="200" MinWidth="300"
+        Title="OpenSpaceConsole" Height="300" Width="450"
+        d:DataContext="{d:DesignInstance local:ConsoleViewModel}">
+    <Window.Resources>
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Padding" Value="5 2" />
+        </Style>
+    </Window.Resources>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Border BorderThickness="1"
+                BorderBrush="{x:Static SystemColors.ControlDarkBrush}">
+            <ScrollViewer>
+                <TextBlock Width="Auto"
+                           TextWrapping="Wrap"
+                           FontFamily="Courier New"
+                           Text="{Binding Path=Log}"/>
+            </ScrollViewer>
+        </Border>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0"
+                     FontFamily="Courier New"
+                     VerticalContentAlignment="Center"
+                     Text="{Binding Path=Prompt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <TextBox.InputBindings>
+                    <KeyBinding Command="{Binding Path=ExecutePromptCommand}" Key="Enter" />
+                    <KeyBinding Command="{Binding Path=ExecutePromptCommand}" Key="Return" />
+                </TextBox.InputBindings>
+            </TextBox>
+            <Button Grid.Column="1"
+                    Content="Clear"
+                    Command="{Binding Path=ClearCommand}"/>
+        </Grid>
+    </Grid>
+</Window>
