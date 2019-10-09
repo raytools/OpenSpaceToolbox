@@ -18,6 +18,11 @@
         /// <summary>
         /// A cutscene
         /// </summary>
-        Cutscene
+        Cutscene,
+
+        /// <summary>
+        /// A bonus game
+        /// </summary>
+        Bonus,
     }
 }

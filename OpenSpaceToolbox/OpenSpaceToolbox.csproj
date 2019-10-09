@@ -75,6 +75,7 @@
     <Compile Include="Converters\IsValidIndexConverter.cs" />
     <Compile Include="DataModels\GameItem.cs" />
     <Compile Include="DataModels\GameList.cs" />
+    <Compile Include="GameManager\Games\Rayman3\Rayman3GameManager.cs" />
     <Compile Include="Windows\GameChooser.xaml.cs">
       <DependentUpon>GameChooser.xaml</DependentUpon>
     </Compile>
