@@ -39,19 +39,7 @@ namespace OpenSpaceToolbox
             LoadBookmarkCommand = new RelayCommand(LoadBookmark);
 
             // Load existing bookmarks
-            if (!File.Exists(BookmarkFile))
-                return;
-
-            var xml = XDocument.Load(BookmarkFile);
-
-            foreach (XElement element in xml.Element(GameManager.BookmarkFileName).Elements())
-            {
-                // TODO: Try/catch in case of corruption
-
-                var bookmark = element.Element("Bookmark");
-
-                AllBookmarkItems.Add(new BookmarkItemViewModel(element.Name.LocalName, bookmark.Element("Name").Value, Single.Parse(bookmark.Element("X").Value, CultureInfo.InvariantCulture.NumberFormat), Single.Parse(bookmark.Element("Y").Value, CultureInfo.InvariantCulture.NumberFormat), Single.Parse(bookmark.Element("Z").Value, CultureInfo.InvariantCulture.NumberFormat)));
-            }
+            LoadBookmarks();
 
             Task.Run(RefreshAsync);
         }
@@ -73,6 +61,33 @@ namespace OpenSpaceToolbox
         #region Private Fields
 
         private string _currentLevel;
+
+        #region Private Methods
+
+        /// <summary>
+        /// Loads the bookmarks from a file
+        /// </summary>
+        private void LoadBookmarks()
+        {
+            if (!File.Exists(BookmarkFile))
+                return;
+
+            var xml = XDocument.Load(BookmarkFile);
+
+            foreach (XElement element in xml.Element(GameManager.BookmarkFileName).Elements())
+            {
+                // TODO: Try/catch in case of corruption
+
+                var bookmark = element.Element("Bookmark");
+
+                AllBookmarkItems.Add(new BookmarkItemViewModel(element.Name.LocalName, bookmark.Element("Name").Value,
+                    Single.Parse(bookmark.Element("X").Value, CultureInfo.InvariantCulture.NumberFormat),
+                    Single.Parse(bookmark.Element("Y").Value, CultureInfo.InvariantCulture.NumberFormat),
+                    Single.Parse(bookmark.Element("Z").Value, CultureInfo.InvariantCulture.NumberFormat)));
+            }
+        }
+
+        #endregion
 
         #endregion
 
@@ -297,7 +312,7 @@ namespace OpenSpaceToolbox
         }
 
         /// <summary>
-        /// Saves the bookmarks
+        /// Saves the bookmarks to a file
         /// </summary>
         public void SaveBookmarks()
         {
