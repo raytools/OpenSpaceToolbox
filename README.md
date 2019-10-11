@@ -16,6 +16,6 @@ Games can have additional, game-specific features.
 * Donald Duck: Goin' Quackers (Quack Attack)
 
 Feel free to copy, edit and distribute.
-Made by Robin.
+Original level switcher by Robin, further development also by Spitfire, RayCarrot and ForgottenIce.
 
 Binaries can be found on the [releases](https://github.com/rtsonneveld/OpenSpaceToolbox/releases) page.
