@@ -1,4 +1,10 @@
 ﻿<Weavers xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="FodyWeavers.xsd">
   <PropertyChanged />
-  <Costura />
+  <Costura>
+    <IncludeAssemblies>
+      PropertyChanged
+      GongSolutions.WPF.DragDrop
+      System.ValueTuple
+    </IncludeAssemblies>
+  </Costura>
 </Weavers>
