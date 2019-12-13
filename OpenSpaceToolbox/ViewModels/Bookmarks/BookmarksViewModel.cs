@@ -28,6 +28,7 @@ namespace OpenSpaceToolbox
             BookmarkFile = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), GameManager.BookmarkFileName+".xml");
             BookmarkItems = new ObservableCollection<BookmarkItemViewModel>();
             AllBookmarkItems = new List<BookmarkItemViewModel>();
+            SelectedBookmarkIndex = -1;
 
             // Enable collection synchronization so the collection can be updated from another thread
             BindingOperations.EnableCollectionSynchronization(BookmarkItems, this);
@@ -130,7 +131,8 @@ namespace OpenSpaceToolbox
 
                     if (lvl == null)
                     {
-                        CurrentLevelName = $"N/A";
+                        CurrentLevelName = "N/A";
+                        CurrentSectionName = "";
                         return;
                     }
 
@@ -138,11 +140,13 @@ namespace OpenSpaceToolbox
 
                     if (container == null)
                     {
-                        CurrentLevelName = $"N/A";
+                        CurrentLevelName = "N/A";
+                        CurrentSectionName = "";
                         return;
                     }
 
-                    CurrentLevelName = $"{container.Name} - {lvl.Name}";
+                    CurrentLevelName = container.Name;
+                    CurrentSectionName = lvl.Name;
                 }
             }
         }
@@ -151,6 +155,8 @@ namespace OpenSpaceToolbox
         /// The name of the currently loaded level
         /// </summary>
         public string CurrentLevelName { get; set; }
+
+        public string CurrentSectionName { get; set; }
 
         /// <summary>
         /// The index for the currently selected bookmark item

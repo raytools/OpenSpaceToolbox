@@ -4,6 +4,33 @@
              Startup="ApplicationStartup"
              ShutdownMode="OnMainWindowClose">
     <Application.Resources>
+
+        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Padding" Value="5 2" />
+            <Setter Property="MinWidth" Value="58" />
+        </Style>
+
+        <Style TargetType="Menu" x:Key="MenuBar">
+            <Setter Property="Background" Value="{x:Static SystemColors.WindowBrush}" />
+            <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlLightBrush}" />
+            <Setter Property="BorderThickness" Value="0 0 0 1" />
+        </Style>
+
+        <Style TargetType="MenuItem" x:Key="MenuBarItem">
+            <Setter Property="Padding" Value="8 2" />
+        </Style>
+
+        <Style TargetType="Line" x:Key="VerticalSeparator">
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="X1" Value="0" />
+            <Setter Property="X2" Value="0" />
+            <Setter Property="Y1" Value="0" />
+            <Setter Property="Y2" Value="1" />
+            <Setter Property="Stretch" Value="Fill" />
+            <Setter Property="Width" Value="1" />
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="Stroke" Value="{x:Static SystemColors.ControlDarkBrush}" />
+        </Style>
          
     </Application.Resources>
 </Application>

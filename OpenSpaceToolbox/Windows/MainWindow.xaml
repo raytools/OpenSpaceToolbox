@@ -10,14 +10,13 @@
         Height="{Binding Path=WindowProperties.Height, Mode=TwoWay}"
         Width="{Binding Path=WindowProperties.Width, Mode=TwoWay}"
         ResizeMode="{Binding Path=WindowProperties.ResizeMode, Mode=TwoWay}"
-        MinHeight="250"
-        MinWidth="250"
+        MinHeight="300"
+        MinWidth="400"
         Closing="OnWindowClosing"
+        SnapsToDevicePixels="True"
         d:DataContext="{d:DesignInstance local:MainViewModel}">
     <Window.Resources>
-        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-            <Setter Property="Padding" Value="5 2" />
-        </Style>
+        
     </Window.Resources>
 
     <ContentControl Content="{Binding Path=CurrentView}"/>
