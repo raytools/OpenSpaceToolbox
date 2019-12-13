@@ -8,7 +8,7 @@ Most prominent features are:
 
 Games can have additional, game-specific features.
 
-![The main window of OpenSpaceToolbox](https://user-images.githubusercontent.com/33195187/66645317-6be9b680-ec23-11e9-87cb-f7cd18b3628d.png)
+![The main window of OpenSpaceToolbox](https://user-images.githubusercontent.com/33195187/70811068-313c0000-1dc5-11ea-8bae-d077021d75c9.png)
 
 ## Currently supported games
 * Rayman 2: The Great Escape
