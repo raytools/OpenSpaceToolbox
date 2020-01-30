@@ -63,6 +63,8 @@ namespace OpenSpaceToolbox
 
         private string _currentLevel;
 
+        #endregion
+
         #region Private Methods
 
         /// <summary>
@@ -82,13 +84,11 @@ namespace OpenSpaceToolbox
                 var bookmark = element.Element("Bookmark");
 
                 AllBookmarkItems.Add(new BookmarkItemViewModel(element.Name.LocalName, bookmark.Element("Name").Value,
-                    Single.Parse(bookmark.Element("X").Value, CultureInfo.InvariantCulture.NumberFormat),
-                    Single.Parse(bookmark.Element("Y").Value, CultureInfo.InvariantCulture.NumberFormat),
-                    Single.Parse(bookmark.Element("Z").Value, CultureInfo.InvariantCulture.NumberFormat)));
+                    float.Parse(bookmark.Element("X").Value, CultureInfo.InvariantCulture.NumberFormat),
+                    float.Parse(bookmark.Element("Y").Value, CultureInfo.InvariantCulture.NumberFormat),
+                    float.Parse(bookmark.Element("Z").Value, CultureInfo.InvariantCulture.NumberFormat)));
             }
         }
-
-        #endregion
 
         #endregion
 
@@ -258,31 +258,34 @@ namespace OpenSpaceToolbox
             if (SelectedBookmark == null)
                 return;
 
-            RenameDialog rename = new RenameDialog
-            {
-                Owner = Application.Current.MainWindow,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                txtbox_name =
+            RenameDialog rename =
+                new RenameDialog(SelectedBookmark.Name, SelectedBookmark.X, SelectedBookmark.Y, SelectedBookmark.Z)
                 {
-                    Text = SelectedBookmark.Name
-                }
-            };
+                    Owner = Application.Current.MainWindow,
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner
+                };
 
             rename.ShowDialog();
 
-            // Get the result
-            string renameBookmarkName = rename.Result;
+            if (!rename.Result) return;
 
-            if (String.IsNullOrEmpty(renameBookmarkName) || SelectedBookmark.Name == renameBookmarkName)
-                return;
+            string newName;
 
-            if (AllBookmarkItems.Any(x => x.Name == renameBookmarkName))
+            if (rename.BookmarkName != SelectedBookmark.Name && AllBookmarkItems.Any(x => x.Name == rename.BookmarkName))
             {
-                MessageBox.Show("A bookmark with that name already exists!");
-                return;
+                int i = 1;
+                do
+                {
+                    newName = rename.BookmarkName + $" ({i})";
+                    i++;
+                } while (AllBookmarkItems.Any(x => x.Name == newName));
             }
+            else newName = rename.BookmarkName;
 
-            SelectedBookmark.Name = renameBookmarkName;
+            SelectedBookmark.Name = newName;
+            SelectedBookmark.X = rename.X;
+            SelectedBookmark.Y = rename.Y;
+            SelectedBookmark.Z = rename.Z;
         }
 
         /// <summary>

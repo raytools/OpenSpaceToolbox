@@ -214,7 +214,7 @@
                                 Margin="0 0 3 3"
                                 Command="{Binding Path=BookmarksVm.AddBookmarkCommand}" />
 
-                        <Button Content="Rename"
+                        <Button Content="Edit"
                                 Margin="0 0 3 3"
                                 Command="{Binding Path=BookmarksVm.RenameBookmarkCommand}"
                                 IsEnabled="{Binding Path=BookmarksVm.SelectedBookmarkIndex, Converter={local:IsValidIndexConverter}}" />

@@ -5,31 +5,71 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OpenSpaceToolbox"
         mc:Ignorable="d"
-        Title="Rename Bookmark"
-        SizeToContent="WidthAndHeight"
-        MinWidth="200"
-        WindowStyle="ToolWindow"
-        ResizeMode="NoResize"
-        Loaded="Window_Loaded">
+        Title="Edit Bookmark"
+        SizeToContent="Height"
+        Width="250"
+        SnapsToDevicePixels="True"
+        ResizeMode="NoResize">
     <StackPanel Margin="10">
 
-        <TextBlock Text="Rename bookmark:"
+        <TextBlock Text="Name:"
+                   Margin="3 0 3 3"
                    HorizontalAlignment="Left"/>
 
-        <TextBox x:Name="txtbox_name"
-                 Margin="0 10"/>
+        <TextBox Name="NameBox"
+                 Margin="0 0 0 5"/>
 
-        <Grid>
-            <Button Content="Rename"
-                    HorizontalAlignment="Left"
-                    IsDefault="True"
-                    Click="Btn_rename_Click"/>
+        <Grid Margin="0 0 0 15">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
 
-            <Button Content="Cancel" 
-                    HorizontalAlignment="Right" 
-                    IsCancel="True"/>
+            <TextBlock Text="X:"
+                       Grid.Row="0" Grid.Column="0"
+                       Margin="3 0 3 3"
+                       HorizontalAlignment="Left"/>
+
+            <TextBox Name="XBox"
+                     Margin="0 0 1 0"
+                     Grid.Row="1" Grid.Column="0"/>
+
+            <TextBlock Text="Y:"
+                       Grid.Row="0" Grid.Column="1"
+                       Margin="3 0 3 3"
+                       HorizontalAlignment="Left"/>
+
+            <TextBox Name="YBox"
+                     Margin="1 0"
+                     Grid.Row="1" Grid.Column="1"/>
+
+            <TextBlock Text="Z:"
+                       Grid.Row="0" Grid.Column="2"
+                       Margin="3 0 3 3"
+                       HorizontalAlignment="Left"/>
+
+            <TextBox Name="ZBox"
+                     Margin="1 0 0 0"
+                     Grid.Row="1" Grid.Column="2"/>
 
         </Grid>
+
+        <WrapPanel HorizontalAlignment="Right">
+
+            <Button Content="OK"
+                    IsDefault="True"
+                    Margin="0 0 5 0"
+                    Click="Btn_rename_Click"/>
+
+            <Button Content="Cancel"
+                    IsCancel="True"/>
+
+        </WrapPanel>
 
     </StackPanel>
 </Window>

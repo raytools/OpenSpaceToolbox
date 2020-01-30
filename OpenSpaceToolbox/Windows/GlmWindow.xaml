@@ -9,6 +9,7 @@
         MinWidth="280"
         MinHeight="220"
         ResizeMode="NoResize"
+        SnapsToDevicePixels="True"
         d:DataContext="{d:DesignInstance local:GlmWindowViewModel}" SizeToContent="WidthAndHeight" Closing="Window_Closing">
     <Window.Resources>
         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">

@@ -41,17 +41,17 @@
         /// <summary>
         /// The X position
         /// </summary>
-        public float X { get; }
+        public float X { get; set; }
 
         /// <summary>
         /// The Y position
         /// </summary>
-        public float Y { get; }
+        public float Y { get; set; }
 
         /// <summary>
         /// The Z position
         /// </summary>
-        public float Z { get; }
+        public float Z { get; set; }
 
         #endregion
 

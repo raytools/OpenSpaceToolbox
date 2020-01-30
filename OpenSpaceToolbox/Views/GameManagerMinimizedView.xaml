@@ -140,7 +140,7 @@
         <Button Content="Add"
                     Command="{Binding Path=BookmarksVm.AddBookmarkCommand}" />
 
-            <Button Content="Rename"
+            <Button Content="Edit"
                     Command="{Binding Path=BookmarksVm.RenameBookmarkCommand}"
                     IsEnabled="{Binding Path=BookmarksVm.SelectedBookmarkIndex, Converter={local:IsValidIndexConverter}}"/>
 
