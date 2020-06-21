@@ -8,39 +8,54 @@
         Title="OpenSpaceToolbox"
         Height="350" Width="320"
         ResizeMode="NoResize"
+        Loaded="WindowLoaded"
         d:DataContext="{d:DesignInstance local:GameChooserViewModel}">
+
     <Window.Resources>
         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
             <Setter Property="Padding" Value="5 2" />
         </Style>
     </Window.Resources>
+
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+
         <TextBlock Grid.Row="0">
             Choose a game:
         </TextBlock>
+
         <ListBox Grid.Row="1" Name="GameListBox"
                  Margin="0 5"
                  ItemsSource="{Binding Path=GameList.Games}"
                  SelectedIndex="{Binding Path=SelectedListIndex}">
+
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Path=Name}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
+
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <EventSetter Event="MouseDoubleClick" Handler="ProcessItem" />
                 </Style>
             </ListBox.ItemContainerStyle>
+
         </ListBox>
+
         <WrapPanel Grid.Row="2"
                    HorizontalAlignment="Right">
-            <Button Content="OK" Width="60" Click="ProcessItem" />
+
+            <Button Content="OK" 
+                    Width="60"
+                    Click="ProcessItem"
+                    IsDefault="True" />
+
         </WrapPanel>
+
     </Grid>
 </Window>

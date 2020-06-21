@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Windows;
+﻿using System.Windows;
 
 namespace OpenSpaceToolbox
 {
@@ -20,6 +19,11 @@ namespace OpenSpaceToolbox
         {
             ViewModel.SelectGame();
             Hide();
+        }
+
+        private void WindowLoaded(object sender, RoutedEventArgs e)
+        {
+            GameListBox.Focus();
         }
     }
 }

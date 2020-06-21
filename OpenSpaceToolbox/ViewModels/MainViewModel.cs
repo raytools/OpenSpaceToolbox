@@ -20,8 +20,8 @@ namespace OpenSpaceToolbox
             ToggleMinimizedUiCommand = new RelayCommand(ToggleMinimizedUi);
 
             // Set full UI as default
-            CurrentView = new GameManagerFullView();
-            WindowProperties = new WindowProperties {Width = 640, Height = 480, ResizeMode = ResizeMode.CanResize};
+            WindowProperties = new WindowProperties {ResizeMode = ResizeMode.CanResize};
+            SetFullView();
 
             // Setup keyboard hook
             GlobalKeyboardHook = new GlobalKeyboardHook();
@@ -116,21 +116,35 @@ namespace OpenSpaceToolbox
 
         #endregion
 
+        #region Private Methods
+
+        private void SetMinimizedView()
+        {
+            CurrentView = new GameManagerMinimizedView();
+            WindowProperties.SetMinSize(250, 400);
+            WindowProperties.SetSize(280, 520);
+        }
+
+        private void SetFullView()
+        {
+            CurrentView = new GameManagerFullView();
+            WindowProperties.SetMinSize(400, 300);
+            WindowProperties.SetSize(640, 480);
+        }
+
+        #endregion
+
         #region Public Methods
 
         public void ToggleMinimizedUi()
         {
             if (CurrentView is GameManagerFullView)
             {
-                CurrentView = new GameManagerMinimizedView();
-                WindowProperties.SetSize(280, 520);
-                WindowProperties.ResizeMode = ResizeMode.NoResize;
+                SetMinimizedView();
             }
             else
             {
-                CurrentView = new GameManagerFullView();
-                WindowProperties.SetSize(640, 480);
-                WindowProperties.ResizeMode = ResizeMode.CanResize;
+                SetFullView();
             }
 
         }

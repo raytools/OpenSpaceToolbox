@@ -10,8 +10,8 @@
         Height="{Binding Path=WindowProperties.Height, Mode=TwoWay}"
         Width="{Binding Path=WindowProperties.Width, Mode=TwoWay}"
         ResizeMode="{Binding Path=WindowProperties.ResizeMode, Mode=TwoWay}"
-        MinHeight="300"
-        MinWidth="400"
+        MinHeight="{Binding Path=WindowProperties.MinHeight}"
+        MinWidth="{Binding Path=WindowProperties.MinWidth}"
         Closing="OnWindowClosing"
         SnapsToDevicePixels="True"
         d:DataContext="{d:DesignInstance local:MainViewModel}">

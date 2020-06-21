@@ -7,10 +7,11 @@
              xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d"
              d:DesignHeight="480" d:DesignWidth="280"
+             MinWidth="200"
              d:DataContext="{d:DesignInstance local:MainViewModel}">
     <UserControl.Resources>
         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-            <Setter Property="Padding" Value="5 2" />
+            <Setter Property="MinWidth" Value="30" />
         </Style>
         <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
             <Setter Property="Margin" Value="2 2" />
