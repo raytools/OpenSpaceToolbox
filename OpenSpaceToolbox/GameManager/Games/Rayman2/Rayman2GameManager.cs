@@ -44,6 +44,7 @@ namespace OpenSpaceToolbox
                 {
                     new LevelViewModel("Walk of Life", "ly_10", LevelType.Level),
                     new LevelViewModel("Walk of Power", "ly_20", LevelType.Level),
+                    new LevelViewModel("Bonus Stage", "bonux", LevelType.Level),
                 }),
                 new LevelContainerViewModel("Cutscenes", new ObservableCollection<LevelViewModel>()
                 {

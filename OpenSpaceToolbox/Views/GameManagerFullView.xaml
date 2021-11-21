@@ -80,7 +80,7 @@
 
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate ItemsSource="{Binding Levels, Mode=OneTime}">
-                            <TextBlock Text="{Binding Name, Mode=OneTime}"
+                            <TextBlock Text="{Binding Name, Mode=OneTime}" ToolTip="{Binding FileName, Mode=OneTime}"
                                        TextWrapping="WrapWithOverflow" />
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
