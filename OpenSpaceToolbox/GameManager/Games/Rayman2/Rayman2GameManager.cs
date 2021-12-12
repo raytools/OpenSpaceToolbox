@@ -29,7 +29,8 @@ namespace OpenSpaceToolbox
             {
                 new Rayman2VoidExtra(this),
                 new Rayman2NoHpExtra(this),
-                new Rayman2GlmMonitorExtra(this)
+                new Rayman2GlmMonitorExtra(this),
+                new Rayman2ProgressArrayExtra(this),
             };
 
             //Levels
@@ -37,6 +38,7 @@ namespace OpenSpaceToolbox
             {
                 new LevelContainerViewModel("Menu", new ObservableCollection<LevelViewModel>()
                 {
+                    new LevelViewModel("Main Menu", "menu", LevelType.Menu),
                     new LevelViewModel("The Hall of Doors", "mapmonde", LevelType.Menu),
                     new LevelViewModel("Score Screen", "raycap", LevelType.Menu),
                 }),

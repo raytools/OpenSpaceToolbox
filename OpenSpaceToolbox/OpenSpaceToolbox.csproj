@@ -92,7 +92,9 @@
     <Compile Include="Converters\IsValidIndexConverter.cs" />
     <Compile Include="DataModels\GameItem.cs" />
     <Compile Include="DataModels\GameList.cs" />
+    <Compile Include="GameManager\Games\Rayman2\Rayman2ProgressArrayExtra.cs" />
     <Compile Include="GameManager\Games\Rayman3\Rayman3GameManager.cs" />
+    <Compile Include="ViewModels\ProgressArrayWindowViewModel.cs" />
     <Compile Include="Windows\GameChooser.xaml.cs">
       <DependentUpon>GameChooser.xaml</DependentUpon>
     </Compile>
@@ -131,6 +133,9 @@
     <Compile Include="Views\GameManagerMinimizedView.xaml.cs">
       <DependentUpon>GameManagerMinimizedView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ProgressArrayWindow.xaml.cs">
+      <DependentUpon>ProgressArrayWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\GlmWindow.xaml.cs">
       <DependentUpon>GlmWindow.xaml</DependentUpon>
     </Compile>
@@ -148,6 +153,10 @@
     <Page Include="Views\GameManagerMinimizedView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ProgressArrayWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\GlmWindow.xaml">
       <SubType>Designer</SubType>
