@@ -45,6 +45,7 @@ namespace OpenSpaceToolbox
             get => SavedProgress==null ? string.Empty : string.Join(" ", SavedProgress.Select(b => b.ToString()));
             set
             {
+                if (value == null) return;
                 string[] byteStrings = value.Split(' ');
                 byte[] byteArray = new byte[Rayman2ProgressArrayExtra.ProgressArrayLengthBytes];
 
