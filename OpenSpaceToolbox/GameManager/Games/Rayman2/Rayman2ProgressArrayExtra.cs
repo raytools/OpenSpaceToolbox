@@ -13,7 +13,7 @@ namespace OpenSpaceToolbox
             ProgressArrayOffsets = new[] {0x0, 0x0, 0x6C, 0x4, 0x0, 0x1C, 0x4E4};
         }
 
-        public const int ProgressArrayLengthBytes = 45 * 4; // 45 ints in global.DsgVar42
+        public const int ProgressArrayLengthBytes = 46 * 4; // 46 (not 45) ints in global.DsgVar42
 
         private int ProgressArrayBasePointer { get; }
         private int[] ProgressArrayOffsets { get; }
@@ -21,7 +21,12 @@ namespace OpenSpaceToolbox
         public byte[] ProgressArray
         {
             get => ReadByteArray(ProgressArrayBasePointer, ProgressArrayLengthBytes, ProgressArrayOffsets);
-            set => WriteByteArray(ProgressArrayBasePointer, value, ProgressArrayOffsets);
+            set
+            {
+                if (value != null) {
+                    WriteByteArray(ProgressArrayBasePointer, value, ProgressArrayOffsets);
+                }
+            } 
         }
 
         public byte[] ReadByteArray(int baseAddress, int arrayLength, params int[] offsets)

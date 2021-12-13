@@ -38,12 +38,14 @@ namespace OpenSpaceToolbox
 
         #region Public Properties
 
+        public string EditProgressText { get; set; }
+
         public string SavedProgressText
         {
             get => SavedProgress==null ? string.Empty : string.Join(" ", SavedProgress.Select(b => b.ToString()));
             set
             {
-                string[] byteStrings = SavedProgressText.Split(' ');
+                string[] byteStrings = value.Split(' ');
                 byte[] byteArray = new byte[Rayman2ProgressArrayExtra.ProgressArrayLengthBytes];
 
                 if (byteStrings.Length != byteArray.Length) return;
@@ -68,12 +70,14 @@ namespace OpenSpaceToolbox
 
         private void LoadProgress()
         {
+            SavedProgressText = EditProgressText;
             Extra.ProgressArray = SavedProgress;
         }
 
         private void SaveProgress()
         {
             SavedProgress = Extra.ProgressArray;
+            EditProgressText = SavedProgressText;
             OnPropertyChanged(nameof(SavedProgressText));
         }
 

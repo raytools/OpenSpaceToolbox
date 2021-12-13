@@ -25,7 +25,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MinWidth="50" />
             </Grid.ColumnDefinitions>
-            <TextBox Text="{Binding Path=SavedProgressText}" TextWrapping="Wrap" MaxWidth="260" />
+            <TextBox Text="{Binding Path=EditProgressText}" TextWrapping="Wrap" MaxWidth="260" />
             <StackPanel Grid.Column="1"
                         Grid.Row="1">
                 <WrapPanel Orientation="Horizontal"
