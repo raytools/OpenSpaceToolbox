@@ -92,8 +92,10 @@
     <Compile Include="Converters\IsValidIndexConverter.cs" />
     <Compile Include="DataModels\GameItem.cs" />
     <Compile Include="DataModels\GameList.cs" />
+    <Compile Include="GameManager\Games\Rayman2\Rayman2MaxHpExtra.cs" />
     <Compile Include="GameManager\Games\Rayman2\Rayman2ProgressArrayExtra.cs" />
     <Compile Include="GameManager\Games\Rayman3\Rayman3GameManager.cs" />
+    <Compile Include="Helpers\ArrayUtil.cs" />
     <Compile Include="ViewModels\ProgressArrayWindowViewModel.cs" />
     <Compile Include="Windows\GameChooser.xaml.cs">
       <DependentUpon>GameChooser.xaml</DependentUpon>

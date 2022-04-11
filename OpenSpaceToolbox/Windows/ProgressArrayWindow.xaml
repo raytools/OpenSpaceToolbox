@@ -7,10 +7,10 @@
         mc:Ignorable="d"
         Title="Progress Array"
         MinWidth="280"
-        MinHeight="220"
+        MinHeight="340"
         ResizeMode="NoResize"
         SnapsToDevicePixels="True"
-        d:DataContext="{d:DesignInstance local:ProgressArrayWindowViewModel}" SizeToContent="WidthAndHeight" Closing="Window_Closing">
+        d:DataContext="{d:DesignInstance local:ProgressArrayWindowViewModel}" SizeToContent="WidthAndHeight" Closing="Window_Closing" Height="340">
     <Window.Resources>
         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
             <Setter Property="Padding" Value="5 2" />
@@ -20,23 +20,100 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition MinHeight="50" />
-                <RowDefinition MinHeight="50" />
+                <RowDefinition  />
+                <RowDefinition  />
+                <RowDefinition  />
+                <RowDefinition  />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MinWidth="50" />
             </Grid.ColumnDefinitions>
             <TextBox Text="{Binding Path=EditProgressText}" TextWrapping="Wrap" MaxWidth="260" />
-            <StackPanel Grid.Column="1"
-                        Grid.Row="1">
+            <StackPanel Grid.Row="1">
                 <WrapPanel Orientation="Horizontal"
                            Margin="5"
                            HorizontalAlignment="Center">
-                    <Button Content="Save Progress" 
-                            Margin="5 5 5 0"
-                            Command="{Binding Path=SaveProgressCommand}" />
                     <Button Content="Load Progress"
                             Margin="5 5 5 0"
                             Command="{Binding Path=LoadProgressCommand}" />
+                    <Button Content="Save Progress" 
+                            Margin="5 5 5 0"
+                            Command="{Binding SaveProgressCommand}" />
+                </WrapPanel>
+            </StackPanel>
+            <StackPanel
+                Grid.Row="2">
+                <WrapPanel Orientation="Horizontal"
+                           Margin="5"
+                           HorizontalAlignment="Center">
+                    <CheckBox x:Name="checkBoxLoadProgressOnLevelReload" Content="Auto-Load Progress on Reload" IsChecked="{Binding Path=LoadProgressOnReload, Mode=TwoWay}"/>
+
+                </WrapPanel>
+            </StackPanel>
+            <StackPanel
+                Grid.Row="3">
+                <WrapPanel Orientation="Horizontal"
+                    Margin="5"
+                    HorizontalAlignment="Center">
+                    <Button Content="Reset Collected Lums"
+                        Margin="5 5 5 0"
+                        Command="{Binding ResetLumsCommand}" />
+                    <Button Content="Reset Collected Cages" 
+                        Margin="5 5 5 0"
+                        Command="{Binding ResetCagesCommand}" />
+                </WrapPanel>
+            </StackPanel>
+            <StackPanel
+                Grid.Row="4">
+                <WrapPanel Orientation="Horizontal"
+                           Margin="5"
+                           HorizontalAlignment="Center">
+                    <Button Content="All Lums Collected"
+                            Margin="5 5 5 0"
+                            Command="{Binding SetLumsCommand}" />
+                    <Button Content="All Cages Collected" 
+                            Margin="5 5 5 0"
+                            Command="{Binding SetCagesCommand}" />
+                </WrapPanel>
+            </StackPanel>
+
+            <StackPanel
+                Grid.Row="5">
+                <WrapPanel Orientation="Horizontal"
+                    Margin="5"
+                    HorizontalAlignment="Center">
+                    <Button Content="3 Megashoots"
+                        Margin="5 5 5 0"
+                        Command="{Binding SetMegashootCommand}" />
+                    <Button Content="No Megashoots" 
+                        Margin="5 5 5 0"
+                        Command="{Binding ResetMegashootCommand}" />
+                </WrapPanel>
+            </StackPanel>
+            <StackPanel
+                Grid.Row="6">
+                <WrapPanel Orientation="Horizontal"
+                           HorizontalAlignment="Center">
+                    <Label x:Name="label" Content="{Binding Path=CustomFlagSelection.IndexString}" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="customFlagSelect" Width="200" Margin="10" Height="20"
+                              DropDownOpened="RefreshFlagList"
+                              ItemsSource = "{Binding Path=CustomFlagItems}"
+                              SelectedItem="{Binding Path=CustomFlagSelection}">
+                    </ComboBox>
+                </WrapPanel>
+            </StackPanel>
+            <StackPanel
+                Grid.Row="7">
+                <WrapPanel Orientation="Horizontal"
+                           HorizontalAlignment="Center">
+                    <Button Content="Refresh"
+                            Margin="5 5 5 0"
+                            Height="20"
+                            Command="{Binding RefreshCustomFlagCommand}" />
+                    <CheckBox x:Name="customFlag" IsEnabled="{Binding CustomFlagSelectionNotNull}" Content="{Binding CustomFlagSelection.Name, FallbackValue=Select a flag...}" IsChecked="{Binding Path=CustomFlagToggle, Mode=TwoWay}" VerticalAlignment="Center"/>
                 </WrapPanel>
             </StackPanel>
         </Grid>

@@ -10,10 +10,10 @@ namespace OpenSpaceToolbox
             Name = "Progress Array";
             ShortName = "Progress Array";
             ProgressArrayBasePointer = 0x500560;
-            ProgressArrayOffsets = new[] {0x0, 0x0, 0x6C, 0x4, 0x0, 0x1C, 0x4E4};
+            ProgressArrayOffsets = new[] {0x0, 0x0, 0x6C, 0x4, 0x0, 0x1C, 0x4E4 + 0x8}; // skip first 8 bytes, these are info for the dsgvar array type and size
         }
 
-        public const int ProgressArrayLengthBytes = 46 * 4; // 46 (not 45) ints in global.DsgVar42
+        public const int ProgressArrayLengthBytes = 45 * 4; // 45 ints in global.DsgVar42
 
         private int ProgressArrayBasePointer { get; }
         private int[] ProgressArrayOffsets { get; }

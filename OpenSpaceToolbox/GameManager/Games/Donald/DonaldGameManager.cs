@@ -1,11 +1,12 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace OpenSpaceToolbox
 {
     public class DonaldGameManager : OpenspaceGameManager
     {
-        #region Constructor
+       #region Constructor
 
         public DonaldGameManager()
         {
@@ -20,6 +21,7 @@ namespace OpenSpaceToolbox
             EngineModePointer = EngineStructurePointer + 0x0;
             LevelNamePointer = EngineStructurePointer + 0x1F;
             PausedStatePointer = 0x400000 + 0x167298;
+            GhostModePointer = 0x400000 + 0x1ae294;
             PlayerCoordinatesBasePointer = 0x400000 + 0x1622C4;
             PlayerCoordinatesOffsets = new[] { 0x8, 0x40 + 0x6C};
             PossibleProcessNames = new[] { "Donald", "Donald.exe" };
@@ -81,6 +83,35 @@ namespace OpenSpaceToolbox
             Levels = LevelContainers.SelectMany(x => x.Levels);
         }
 
-        #endregion
+      #endregion
+
+      protected override void WritePlayerCoordinates(float x, float y, float z)
+      {
+         var startCoords = ReadPlayerCoordinates();
+
+         float startX = startCoords.Item1;
+         float startY = startCoords.Item2;
+         float startZ = startCoords.Item3;
+
+         float diffX = (startX - x);
+         float diffY = (startY - y);
+         float diffZ = (startZ - z);
+
+         float distance = (float)Math.Sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ);
+
+         int steps = 1 + (int)(distance/4.0f);
+
+         for (int i = 0; i < steps; i++) {
+
+            float f = (float)i / steps;
+            float interX = startX + (x - startX) * f;
+            float interY = startY + (y - startY) * f;
+            float interZ = startZ + (z - startZ) * f;
+
+            
+            WriteCoordinates(interX, interY, interZ, PlayerCoordinatesBasePointer, PlayerCoordinatesOffsets);
+         }
+         WriteCoordinates(x, y, z, PlayerCoordinatesBasePointer, PlayerCoordinatesOffsets);
+      }
     }
 }

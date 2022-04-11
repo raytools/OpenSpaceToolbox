@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace OpenSpaceToolbox
@@ -56,15 +57,30 @@ namespace OpenSpaceToolbox
 
         public IEnumerable<LevelViewModel> Levels { get; protected set; }
 
-        #endregion
+      #endregion
 
-        #region Protected Methods
 
-        /// <summary>
-        /// Reads player coordinates from the game memory.
-        /// </summary>
-        /// <returns></returns>
-        protected abstract (float, float, float) ReadPlayerCoordinates();
+      #region Event Hooks
+
+      /// <summary>
+      /// Gets invoked when the level is reloaded
+      /// </summary>
+      public event Action OnReloadLevel;
+
+      /// <summary>
+      /// Gets invoked when the level is changed
+      /// </summary>
+      public event Action<string> OnChangeLevel;
+
+      #endregion
+
+      #region Protected Methods
+
+      /// <summary>
+      /// Reads player coordinates from the game memory.
+      /// </summary>
+      /// <returns></returns>
+      protected abstract (float, float, float) ReadPlayerCoordinates();
 
         /// <summary>
         /// Writes player coordinates from the game memory.
@@ -84,7 +100,10 @@ namespace OpenSpaceToolbox
         /// Loads a new level.
         /// </summary>
         /// <param name="levelName"></param>
-        protected abstract void ChangeLevel(string levelName);
+        protected virtual void ChangeLevel(string levelName)
+        {
+           OnChangeLevel?.Invoke(levelName);
+        }
 
         #endregion
 
@@ -112,7 +131,10 @@ namespace OpenSpaceToolbox
         /// <summary>
         /// Reloads the current level.
         /// </summary>
-        public abstract void ReloadLevel();
+        public virtual void ReloadLevel()
+        {
+           OnReloadLevel?.Invoke();
+        }
 
         public abstract void LoadOffsetLevel(int offset);
 

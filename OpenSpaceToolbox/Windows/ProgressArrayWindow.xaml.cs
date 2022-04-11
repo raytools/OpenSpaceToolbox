@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace OpenSpaceToolbox
 {
@@ -19,5 +20,15 @@ namespace OpenSpaceToolbox
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
         }
+
+      private void button_Click(object sender, RoutedEventArgs e)
+      {
+
+      }
+
+      private void RefreshFlagList(object sender, EventArgs e)
+      {
+         ViewModel.RefreshFlagList();
+      }
     }
 }

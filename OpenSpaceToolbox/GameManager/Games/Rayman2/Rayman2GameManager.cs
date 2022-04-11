@@ -29,6 +29,7 @@ namespace OpenSpaceToolbox
             {
                 new Rayman2VoidExtra(this),
                 new Rayman2NoHpExtra(this),
+                new Rayman2MaxHpExtra(this),
                 new Rayman2GlmMonitorExtra(this),
                 new Rayman2ProgressArrayExtra(this),
             };

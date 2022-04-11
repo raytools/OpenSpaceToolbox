@@ -12,12 +12,13 @@ namespace OpenSpaceToolbox
     public abstract class OpenspaceGameManager : GenericGameManager
     {
 
-        #region Protected Properties
+       #region Protected Properties
 
-        protected int EngineStructurePointer { get; set; }
+      protected int EngineStructurePointer { get; set; }
         protected int EngineModePointer { get; set; }
         protected int LevelNamePointer { get; set; }
         protected int PausedStatePointer { get; set; }
+        protected int GhostModePointer { get; set; }
         protected int PlayerCoordinatesBasePointer { get; set; }
         protected int[] PlayerCoordinatesOffsets { get; set; }
         protected string[] PossibleProcessNames { get; set; }
@@ -49,7 +50,8 @@ namespace OpenSpaceToolbox
 
         protected override void ChangeLevel(string levelName)
         {
-            int processHandle = GetProcessHandle();
+           base.ChangeLevel(levelName);
+           int processHandle = GetProcessHandle();
             int bytesReadOrWritten = 0;
 
             var buffer = Encoding.ASCII.GetBytes(levelName + char.MinValue);
@@ -58,7 +60,8 @@ namespace OpenSpaceToolbox
             buffer = new byte[] {6};
 
             Memory.WriteProcessMemory(processHandle, EngineModePointer, buffer, buffer.Length, ref bytesReadOrWritten);
-        }
+
+      }
 
         #endregion
 
@@ -164,7 +167,9 @@ namespace OpenSpaceToolbox
 
         public override void ReloadLevel()
         {
-            int processHandle = GetProcessHandle();
+           base.ReloadLevel();
+
+         int processHandle = GetProcessHandle();
             int bytesReadOrWritten = 0;
 
             byte[] currentBufferLevelName = new byte[1];
@@ -175,6 +180,7 @@ namespace OpenSpaceToolbox
             var buffer = new byte[] {6};
 
             Memory.WriteProcessMemory(processHandle, EngineModePointer, buffer, buffer.Length, ref bytesReadOrWritten);
+
         }
 
         public override void LoadOffsetLevel(int offset)
@@ -203,6 +209,18 @@ namespace OpenSpaceToolbox
             CurrentLevel = levelToLoad;
         }
 
-        #endregion
-    }
+        public void WriteGhostMode(bool enable)
+        {
+           var processHandle = GetProcessHandle();
+           if (processHandle < 0)
+              return;
+
+           var buffer = BitConverter.GetBytes(enable ? 1 : 0);
+
+           var bytesReadOrWritten = 0;
+           Memory.WriteProcessMemory(processHandle, GhostModePointer, buffer, 1, ref bytesReadOrWritten);
+        }
+
+      #endregion
+   }
 }
