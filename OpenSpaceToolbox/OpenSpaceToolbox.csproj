@@ -69,6 +69,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\portable-net45+win8+wp8+wpa81\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
@@ -92,10 +95,12 @@
     <Compile Include="Converters\IsValidIndexConverter.cs" />
     <Compile Include="DataModels\GameItem.cs" />
     <Compile Include="DataModels\GameList.cs" />
+    <Compile Include="GameManager\Games\Generic\GenericSpeedMonitorExtra.cs" />
     <Compile Include="GameManager\Games\Rayman2\Rayman2MaxHpExtra.cs" />
     <Compile Include="GameManager\Games\Rayman2\Rayman2ProgressArrayExtra.cs" />
     <Compile Include="GameManager\Games\Rayman3\Rayman3GameManager.cs" />
     <Compile Include="Helpers\ArrayUtil.cs" />
+    <Compile Include="ViewModels\SpeedMonitorWindowViewModel.cs" />
     <Compile Include="ViewModels\ProgressArrayWindowViewModel.cs" />
     <Compile Include="Windows\GameChooser.xaml.cs">
       <DependentUpon>GameChooser.xaml</DependentUpon>
@@ -135,6 +140,9 @@
     <Compile Include="Views\GameManagerMinimizedView.xaml.cs">
       <DependentUpon>GameManagerMinimizedView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\SpeedMonitorWindow.xaml.cs">
+      <DependentUpon>SpeedMonitorWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ProgressArrayWindow.xaml.cs">
       <DependentUpon>ProgressArrayWindow.xaml</DependentUpon>
     </Compile>
@@ -155,6 +163,10 @@
     <Page Include="Views\GameManagerMinimizedView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\SpeedMonitorWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\ProgressArrayWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -211,6 +223,7 @@
   <ItemGroup>
     <Resource Include="OpenSpaceIcon.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

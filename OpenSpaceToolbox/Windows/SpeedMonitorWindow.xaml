@@ -1,0 +1,120 @@
+﻿<Window x:Class="OpenSpaceToolbox.SpeedMonitorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OpenSpaceToolbox"
+        mc:Ignorable="d"
+        Title="Speed Monitor"
+        MinWidth="280"
+        MinHeight="220"
+        ResizeMode="NoResize"
+        SnapsToDevicePixels="True"
+        d:DataContext="{d:DesignInstance local:SpeedMonitorWindowViewModel}" SizeToContent="WidthAndHeight" Closing="Window_Closing">
+    <Window.Resources>
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Padding" Value="5 2" />
+        </Style>
+    </Window.Resources>
+    <StackPanel Margin="10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition MinHeight="50" />
+                <RowDefinition MinHeight="50" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="50" />
+                <ColumnDefinition MinWidth="50" />
+            </Grid.ColumnDefinitions>
+            <GroupBox Grid.Column="0"
+                      Grid.Row="0"
+                      Margin="0 0 0 0">
+                <GroupBox.Header>
+                    <TextBlock FontWeight="Bold"
+                               Text="Speed" />
+                </GroupBox.Header>
+                <StackPanel Margin="5">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="X: " />
+                        <TextBlock Text="{Binding Path=SpeedX, StringFormat={}{0:F3}}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Y: " />
+                        <TextBlock Text="{Binding Path=SpeedY, StringFormat={}{0:F3}}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Z: " />
+                        <TextBlock Text="{Binding Path=SpeedZ, StringFormat={}{0:F3}}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="|XY|:" />
+                        <TextBlock Text="{Binding SpeedXY, StringFormat=\{0:F3\}}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="|XYZ|:" />
+                        <TextBlock Text="{Binding SpeedXYZ, StringFormat=\{0:F3\}}" />
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Grid.Column="0"
+                      Grid.Row="1"
+                      Margin="0,0,0,0">
+                <GroupBox.Header>
+                    <TextBlock FontWeight="Bold"
+                               Text="Live Coordinates"
+                               />
+                </GroupBox.Header>
+                <StackPanel Margin="5">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="X: " />
+                        <TextBlock Text="{Binding Path=PositionX, StringFormat={}{0:F3}}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Y: " />
+                        <TextBlock Text="{Binding Path=PositionY, StringFormat={}{0:F3}}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Z: " />
+                        <TextBlock Text="{Binding Path=PositionZ, StringFormat={}{0:F3}}" />
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Grid.Column="1"
+                      Margin="0,0,0,0">
+                <GroupBox.Header>
+                    <TextBlock FontWeight="Bold"
+                               Text="Average Speed" />
+                </GroupBox.Header>
+                <StackPanel Margin="5">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="X: " />
+                        <TextBlock Text="{Binding Path=AverageSpeedX, StringFormat={}{0:F3}}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Y: " />
+                        <TextBlock Text="{Binding Path=AverageSpeedY, StringFormat={}{0:F3}}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Z: " />
+                        <TextBlock Text="{Binding Path=AverageSpeedZ, StringFormat={}{0:F3}}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="|XY|: " />
+                        <TextBlock Text="{Binding Path=AverageSpeedXY, StringFormat={}{0:F3}}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="|XYZ|: " />
+                        <TextBlock Text="{Binding Path=AverageSpeedXYZ, StringFormat={}{0:F3}}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Duration: " />
+                        <TextBlock Text="{Binding Path=AverageSpeedDuration, StringFormat={}{0:F1} s}" />
+                    </StackPanel>
+                    <Grid HorizontalAlignment="Stretch">
+                        <Slider Value="{Binding Path=AverageSpeedDuration}" Minimum="0.1" Maximum="20.0" IsSnapToTickEnabled="True" TickFrequency="0.1"></Slider>
+                    </Grid>
+                </StackPanel>
+            </GroupBox>
+        </Grid>
+    </StackPanel>
+</Window>

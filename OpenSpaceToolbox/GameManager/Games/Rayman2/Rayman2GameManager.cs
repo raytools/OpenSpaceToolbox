@@ -27,6 +27,7 @@ namespace OpenSpaceToolbox
             //Extras
             ExtraActions = new ObservableCollection<ExtraAction>()
             {
+                new GenericSpeedMonitorExtra(this),
                 new Rayman2VoidExtra(this),
                 new Rayman2NoHpExtra(this),
                 new Rayman2MaxHpExtra(this),

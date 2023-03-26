@@ -27,6 +27,7 @@ namespace OpenSpaceToolbox
             //Extras
             ExtraActions = new ObservableCollection<ExtraAction>()
             {
+                new GenericSpeedMonitorExtra(this),
             };
 
             //Levels

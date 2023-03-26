@@ -29,6 +29,7 @@ namespace OpenSpaceToolbox
             //Extras
             ExtraActions = new ObservableCollection<ExtraAction>()
             {
+                new GenericSpeedMonitorExtra(this),
                 new DonaldLivesExtra(this),
             };
 
