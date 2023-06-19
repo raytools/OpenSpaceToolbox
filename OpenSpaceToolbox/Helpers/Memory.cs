@@ -28,6 +28,8 @@ namespace OpenSpaceToolbox
 
         public static int GetPointerPath(int processHandle, int baseAddress, params int[] offsets)
         {
+            if (offsets == null || offsets.Length == 0) return baseAddress;
+
             int currentAddress = baseAddress;
             int bytesReadOrWritten = 0;
 
@@ -35,15 +37,13 @@ namespace OpenSpaceToolbox
             ReadProcessMemory(processHandle, currentAddress, buffer, buffer.Length, ref bytesReadOrWritten);
             currentAddress = BitConverter.ToInt32(buffer, 0);
 
-            foreach (int offset in offsets)
-            {
-                if (offset == offsets.Last())
-                {
+            for (var index = 0; index < offsets.Length; index++) {
+                var offset = offsets[index];
+                if (index == offsets.Length-1) {
                     currentAddress += offset;
-                }
-                else
-                {
-                    ReadProcessMemory(processHandle, currentAddress + offset, buffer, buffer.Length, ref bytesReadOrWritten);
+                } else {
+                    ReadProcessMemory(processHandle, currentAddress + offset, buffer, buffer.Length,
+                        ref bytesReadOrWritten);
                     currentAddress = BitConverter.ToInt32(buffer, 0);
                 }
             }

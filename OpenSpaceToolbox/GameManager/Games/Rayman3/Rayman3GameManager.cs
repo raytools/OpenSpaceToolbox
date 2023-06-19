@@ -20,6 +20,7 @@ namespace OpenSpaceToolbox
             EngineModePointer = EngineStructurePointer + 0x0;
             LevelNamePointer = EngineStructurePointer + 0x1F;
             PausedStatePointer = 0x7D848C;
+            GhostModePointer = 0x7D7D84;
             PlayerCoordinatesBasePointer = 0x5BFAD4;
             PlayerCoordinatesOffsets = new[] { 0x140, 0x258, 0x108, 0x324};
             PossibleProcessNames = new[] { "Rayman3", "Rayman3.exe", "Rayman3.exe.noshim" };
@@ -133,6 +134,6 @@ namespace OpenSpaceToolbox
             Levels = LevelContainers.SelectMany(x => x.Levels);
         }
 
-        #endregion
+      #endregion
     }
 }

@@ -98,6 +98,7 @@
     <Compile Include="GameManager\Games\Generic\GenericSpeedMonitorExtra.cs" />
     <Compile Include="GameManager\Games\Rayman2\Rayman2MaxHpExtra.cs" />
     <Compile Include="GameManager\Games\Rayman2\Rayman2ProgressArrayExtra.cs" />
+    <Compile Include="GameManager\Games\Rayman2\Rayman2CheckpointExtra.cs" />
     <Compile Include="GameManager\Games\Rayman3\Rayman3GameManager.cs" />
     <Compile Include="Helpers\ArrayUtil.cs" />
     <Compile Include="ViewModels\SpeedMonitorWindowViewModel.cs" />

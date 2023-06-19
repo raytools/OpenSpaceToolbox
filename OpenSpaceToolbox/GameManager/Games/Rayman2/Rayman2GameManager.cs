@@ -22,6 +22,9 @@ namespace OpenSpaceToolbox
             PausedStatePointer = 0x500FAA;
             PlayerCoordinatesBasePointer = 0x500560;
             PlayerCoordinatesOffsets = new[] { 0x224, 0x310, 0x34, 0x0, 0x1ac };
+
+            GhostModePointer = 0x500370;
+
             PossibleProcessNames = new[] { "Rayman2", "Rayman2.exe", "Rayman2.exe.noshim" };
 
             //Extras
@@ -33,6 +36,7 @@ namespace OpenSpaceToolbox
                 new Rayman2MaxHpExtra(this),
                 new Rayman2GlmMonitorExtra(this),
                 new Rayman2ProgressArrayExtra(this),
+                new Rayman2CheckpointExtra(this),
             };
 
             //Levels
