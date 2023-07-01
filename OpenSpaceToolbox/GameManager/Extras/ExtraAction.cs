@@ -22,6 +22,7 @@ namespace OpenSpaceToolbox
         #region Public Properties
 
         public string Name { get; protected set; }
+        public string Tooltip { get; protected set; }
 
         public string ShortName { get; protected set; }
 

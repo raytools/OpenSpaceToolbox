@@ -42,18 +42,23 @@
                 
                 <MenuItem.ItemTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type local:ExtraAction}">
-                        <TextBlock Text="{Binding Name}"></TextBlock>
+                        <TextBlock ToolTip="{Binding Tooltip}"  Text="{Binding Name}"></TextBlock>
                     </HierarchicalDataTemplate>
                 </MenuItem.ItemTemplate>
 
             </MenuItem>
 
-            <MenuItem Header="Settings">
+            <MenuItem Header="Settings" Click="MenuItem_Click">
                 
                 <MenuItem Header="Enable hotkeys"
                           IsCheckable="True"
                           IsChecked="{Binding Path=HotkeysEnabled}"
                           ToolTip="{Binding Path=HotkeysToggleTooltip}" />
+
+                <MenuItem Header="Enable camera reset"
+                          IsCheckable="True"
+                          IsChecked="{Binding Path=GameManager.CameraResetEnabled}"
+                          ToolTip="{Binding Path=CameraResetToggleTooltip}" />
                 
                 <MenuItem Header="Minimized UI"
                           Command="{Binding Path=ToggleMinimizedUiCommand}">

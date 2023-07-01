@@ -44,13 +44,25 @@ namespace OpenSpaceToolbox
          {
             WritePlayerCoordinates(value.Item1, value.Item2, value.Item3);
 
-            bool oldGhostMode = ReadGhostMode();
-            WriteGhostMode(true);
-            Thread.Sleep(30);
-            WriteGhostMode(oldGhostMode);
+            if (CameraResetEnabled) {
+               bool oldGhostMode = ReadGhostMode();
+
+               Thread.Sleep(10);
+               WriteGhostMode(true);
+               Thread.Sleep(10);
+               WriteGhostMode(oldGhostMode);
+            }
          }
       }
-      
+
+
+      /// <summary>
+      /// The saved position
+      /// </summary>
+      public (float, float, float) SavedPosition { get; set; }
+
+      public bool CameraResetEnabled { get; set; } = true;
+
       /// <summary>
       /// Current level name.
       /// Retrieving and writing values to the memory should be handled in functions: GetCurrentLevelName and ChangeLevel.

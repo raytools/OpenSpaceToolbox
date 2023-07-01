@@ -128,6 +128,7 @@ namespace OpenSpaceToolbox
             new FlagItem(Extra, 1123, "Elixir of Life obtained"),
             new FlagItem(Extra, 1133, "watched woods of light teensie cutscene"),
             new FlagItem(Extra, 1143, "orange shots, fist charge power (glowfist)"),
+            new FlagItem(Extra, 1159, "Foutch defeated in Beneath Rock and Lava"),
             new FlagItem(Extra, 1171, "Clark destroyed the first wall"),
             new FlagItem(Extra, 1172, "Clark destroyed the second wall"),
             new FlagItem(Extra, 1175, "Woods of Light murfy 1"),

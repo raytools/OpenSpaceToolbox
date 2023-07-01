@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OpenSpaceToolbox
 {
@@ -36,7 +38,8 @@ namespace OpenSpaceToolbox
                 new Rayman2MaxHpExtra(this),
                 new Rayman2GlmMonitorExtra(this),
                 new Rayman2ProgressArrayExtra(this),
-                new Rayman2CheckpointExtra(this),
+                new Rayman2CheckpointExtra(this, Rayman2CheckpointExtra.CheckpointMode.CurrentPosition),
+                new Rayman2CheckpointExtra(this, Rayman2CheckpointExtra.CheckpointMode.SavedPosition),
             };
 
             //Levels
@@ -181,6 +184,24 @@ namespace OpenSpaceToolbox
             };
 
             Levels = LevelContainers.SelectMany(x => x.Levels);
+
+            Task.Run(ChangeHudIcon);
+        }
+
+        private int _hudChangedForProcess = -1;
+
+        private async void ChangeHudIcon()
+        {
+            while (true) {
+                int processHandle = GetProcessHandle(false);
+
+                if (processHandle > 0 && _hudChangedForProcess != processHandle) {
+                    _hudChangedForProcess = processHandle;
+                    WriteBytes(new byte[] { (byte)'x' }, 0x4B7314, 0x48, 0x54, 0x0, 0x10, 0x0, 0x4, 0x6EF);
+                }
+
+                await Task.Delay(1000);
+            }
         }
 
         #endregion

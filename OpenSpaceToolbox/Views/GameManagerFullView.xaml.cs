@@ -26,5 +26,10 @@ namespace OpenSpaceToolbox
                 DataContext is MainViewModel viewModel)
                 viewModel.GameManager.CurrentLevel = lvl.FileName;
         }
+
+      private void MenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
+      {
+
+        }
     }
 }

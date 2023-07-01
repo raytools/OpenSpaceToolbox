@@ -29,7 +29,10 @@ namespace OpenSpaceToolbox
 
             HotkeysToggleTooltip =
                 "Enables hotkeys:\nR - reload level\nK - previous level\nL - next level\nP - save position\nO - load position\nB - add bookmark";
-        }
+
+            CameraResetToggleTooltip =
+                "Forces the camera to reset when changing position - this has some side effects like in Walk of Life/Power or it can even crash";
+      }
 
         #endregion
 
@@ -114,11 +117,13 @@ namespace OpenSpaceToolbox
 
         public string HotkeysToggleTooltip { get; }
 
-        #endregion
+        public string CameraResetToggleTooltip { get; }
 
-        #region Private Methods
+      #endregion
 
-        private void SetMinimizedView()
+      #region Private Methods
+
+      private void SetMinimizedView()
         {
             CurrentView = new GameManagerMinimizedView();
             WindowProperties.SetMinSize(250, 400);

@@ -3,11 +3,23 @@ using System.Threading;
 
 namespace OpenSpaceToolbox
 {
-   public class Rayman2CheckpointExtra : OpenspaceExtraAction
-   {
-      public Rayman2CheckpointExtra(Rayman2GameManager gameManager) : base(gameManager)
+   public class Rayman2CheckpointExtra : OpenspaceExtraAction {
+      public enum CheckpointMode
       {
-         Name = ShortName = "Set spawn point (CAREFUL)";
+         CurrentPosition,
+         SavedPosition
+      }
+
+      public Rayman2CheckpointExtra(Rayman2GameManager gameManager, CheckpointMode mode) : base(gameManager)
+      {
+         string modeName = mode switch
+         {
+            CheckpointMode.CurrentPosition => "(At Current)",
+            CheckpointMode.SavedPosition => "(At Saved)",
+            _ => throw new ArgumentOutOfRangeException(nameof(mode), mode, null)
+         };
+         Name = ShortName = $"⚠ Set spawn point {modeName}";
+         Mode = mode;
 
          ResurrectionPositionPointer = 0x500590;
 
@@ -17,7 +29,11 @@ namespace OpenSpaceToolbox
 
          RespawnPersoPointer = 0x4B7308;
          RespawnPersoPointerPath = new int[] {0xC, 0, 0x4, 0x1C, 0xA90 };
+
+         Tooltip = "⚠ Warning: these actions modify the program's executable memory and require a game restart to undo!";
       }
+
+      public CheckpointMode Mode { get; set; }
 
       private int RespawnPersoPointer { get; }
       private int[] RespawnPersoPointerPath { get; }
@@ -59,12 +75,18 @@ namespace OpenSpaceToolbox
           * -> if(g_stEngineStructure.bResurection)
           */
 
-         var playerCoords = GameManager.PlayerCoordinates;
+         var currentCoords = Mode switch {
+            CheckpointMode.CurrentPosition => GameManager.PlayerCoordinates,
+            CheckpointMode.SavedPosition => GameManager.SavedPosition,
+            _ => throw new ArgumentOutOfRangeException()
+         };
+
+         //CheckpointMode.CurrentPosition ? GameManager.PlayerCoordinates;
 
          Thread.Sleep(100);
 
          GameManager.WriteCoordinates(
-            playerCoords.Item1, playerCoords.Item2, playerCoords.Item3,
+            currentCoords.Item1, currentCoords.Item2, currentCoords.Item3,
             ResurrectionPositionPointer);
 
          // GlobalActorModel.DsgVar_29, reset checkpoint object to null
@@ -76,7 +98,7 @@ namespace OpenSpaceToolbox
          GameManager.WriteEngineMode(8); // EM_ModePlayerDead
 
          Thread.Sleep(150);
-         GameManager.PlayerCoordinates = playerCoords;
+         GameManager.PlayerCoordinates = currentCoords;
       }
    }
 }

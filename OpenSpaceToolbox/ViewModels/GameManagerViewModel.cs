@@ -30,21 +30,6 @@ namespace OpenSpaceToolbox
         #region Public Properties
 
         /// <summary>
-        /// The saved X position
-        /// </summary>
-        public float SavedXPosition { get; set; }
-
-        /// <summary>
-        /// The saved Y position
-        /// </summary>
-        public float SavedYPosition { get; set; }
-
-        /// <summary>
-        /// The saved Z position
-        /// </summary>
-        public float SavedZPosition { get; set; }
-
-        /// <summary>
         /// The random generator for this view model
         /// </summary>
         public Random Random { get; }
@@ -93,7 +78,7 @@ namespace OpenSpaceToolbox
         /// </summary>
         public void LoadSavedPosition()
         {
-            GameManager.PlayerCoordinates = (SavedXPosition, SavedYPosition, SavedZPosition);
+            GameManager.PlayerCoordinates = GameManager.SavedPosition;
         }
 
         /// <summary>
@@ -101,10 +86,7 @@ namespace OpenSpaceToolbox
         /// </summary>
         public void SavePosition()
         {
-            var coords = GameManager.PlayerCoordinates;
-            SavedXPosition = coords.Item1;
-            SavedYPosition = coords.Item2;
-            SavedZPosition = coords.Item3;
+            GameManager.SavedPosition = GameManager.PlayerCoordinates;
         }
 
         #endregion

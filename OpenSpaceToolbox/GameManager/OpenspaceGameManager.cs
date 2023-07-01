@@ -117,7 +117,7 @@ namespace OpenSpaceToolbox
 
       public void WriteBytes(byte[] bytes, int baseAddress, params int[] offsets)
       {
-         int processHandle = GetProcessHandle();
+         int processHandle = GetProcessHandle(false);
          if (processHandle < 0)
             return;
 
