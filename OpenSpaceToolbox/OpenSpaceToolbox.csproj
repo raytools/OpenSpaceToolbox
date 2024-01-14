@@ -98,6 +98,7 @@
     <Compile Include="DataModels\GameItem.cs" />
     <Compile Include="DataModels\GameList.cs" />
     <Compile Include="GameManager\Games\Generic\GenericSpeedMonitorExtra.cs" />
+    <Compile Include="GameManager\Games\Rayman2\Rayman2RespawnAnimRemover.cs" />
     <Compile Include="GameManager\Games\Rayman2\Rayman2MaxHpExtra.cs" />
     <Compile Include="GameManager\Games\Rayman2\Rayman2ProgressArrayExtra.cs" />
     <Compile Include="GameManager\Games\Rayman2\Rayman2CheckpointExtra.cs" />

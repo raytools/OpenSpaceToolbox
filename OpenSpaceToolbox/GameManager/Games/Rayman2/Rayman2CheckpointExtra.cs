@@ -30,7 +30,7 @@ namespace OpenSpaceToolbox
          RespawnPersoPointer = 0x4B7308;
          RespawnPersoPointerPath = new int[] {0xC, 0, 0x4, 0x1C, 0xA90 };
 
-         Tooltip = "⚠ Warning: these actions modify the program's executable memory and require a game restart to undo!";
+         Tooltip = "⚠ Warning: these actions require a game restart to undo!";
       }
 
       public CheckpointMode Mode { get; set; }
