@@ -18,11 +18,13 @@ namespace OpenSpaceToolbox
          if (processHandle < 0)
             return;
 
-         byte[] nopInstructions = new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90};
+         byte[] retBytes = new byte[] { 0xC3 };
 
-         GameManager.WriteBytes(nopInstructions, 0x45F85E);
-         GameManager.WriteBytes(nopInstructions, 0x4508F0);
-         GameManager.WriteBytes(nopInstructions, 0x4043D6);
+         GameManager.WriteBytes(retBytes, 0x45F7E0);
+         GameManager.WriteBytes(retBytes, 0x45F530);
+         GameManager.WriteBytes(retBytes, 0x45EED0);
+         GameManager.WriteBytes(retBytes, 0x45EDF0);
+         GameManager.WriteBytes(retBytes, 0x45EE10);
       }
    }
 }
