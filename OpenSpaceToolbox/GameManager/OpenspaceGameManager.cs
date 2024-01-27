@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows;
 
 namespace OpenSpaceToolbox
@@ -247,8 +248,8 @@ namespace OpenSpaceToolbox
             currentBufferLevelName.Length, ref bytesReadOrWritten);
 
          if (currentBufferLevelName[0] == 0) return;
-         
-         WriteEngineMode(EnumEngineMode.EnterLevel);
+
+         WriteEngineMode(EnumEngineMode.ChangeLevel);
       }
 
       public override void LoadOffsetLevel(int offset)

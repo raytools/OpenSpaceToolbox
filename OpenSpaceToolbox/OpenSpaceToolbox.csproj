@@ -99,6 +99,7 @@
     <Compile Include="DataModels\GameList.cs" />
     <Compile Include="GameManager\EnumEngineMode.cs" />
     <Compile Include="GameManager\Games\Generic\GenericSpeedMonitorExtra.cs" />
+    <Compile Include="GameManager\Games\Rayman2\Rayman2LoadingScreenRemover.cs" />
     <Compile Include="GameManager\Games\Rayman2\Rayman2RespawnAnimRemover.cs" />
     <Compile Include="GameManager\Games\Rayman2\Rayman2MaxHpExtra.cs" />
     <Compile Include="GameManager\Games\Rayman2\Rayman2ProgressArrayExtra.cs" />

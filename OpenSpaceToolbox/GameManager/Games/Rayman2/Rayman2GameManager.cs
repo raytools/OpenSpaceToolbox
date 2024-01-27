@@ -41,6 +41,7 @@ namespace OpenSpaceToolbox
                 new Rayman2CheckpointExtra(this, Rayman2CheckpointExtra.CheckpointMode.CurrentPosition),
                 new Rayman2CheckpointExtra(this, Rayman2CheckpointExtra.CheckpointMode.SavedPosition),
                 new Rayman2RespawnAnimRemover(this),
+                new Rayman2LoadingScreenRemover(this),
             };
 
             //Levels
