@@ -95,7 +95,7 @@ namespace OpenSpaceToolbox
          Thread.Sleep(50);
 
          // Deathwarp and immediately put player back
-         GameManager.WriteEngineMode(8); // EM_ModePlayerDead
+         GameManager.WriteEngineMode(OpenSpaceToolbox.GameManager.EnumEngineMode.PlayerDead);
 
          Thread.Sleep(150);
          GameManager.PlayerCoordinates = currentCoords;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSpaceToolbox.GameManager;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -57,16 +58,16 @@ namespace OpenSpaceToolbox
          var buffer = Encoding.ASCII.GetBytes(levelName + char.MinValue);
          Memory.WriteProcessMemory(processHandle, LevelNamePointer, buffer, buffer.Length, ref bytesReadOrWritten);
 
-         WriteEngineMode(6);
+         WriteEngineMode(EnumEngineMode.ChangeLevel);
       }
 
       #endregion
 
       #region Public Methods
 
-      public void WriteEngineMode(byte newMode)
+      public void WriteEngineMode(EnumEngineMode newMode)
       {
-         WriteBytes(new byte[]{newMode}, EngineModePointer);
+         WriteBytes(new byte[]{(byte)newMode}, EngineModePointer);
       }
 
       public int ReadDWord(int baseAddress, params int[] offsets)
@@ -247,7 +248,7 @@ namespace OpenSpaceToolbox
 
          if (currentBufferLevelName[0] == 0) return;
          
-         WriteEngineMode(6);
+         WriteEngineMode(EnumEngineMode.EnterLevel);
       }
 
       public override void LoadOffsetLevel(int offset)
