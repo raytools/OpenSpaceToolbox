@@ -235,7 +235,7 @@ namespace OpenSpaceToolbox
             if (SelectedBookmark == null)
                 return;
 
-            GameManager.PlayerCoordinates = (SelectedBookmark.X, SelectedBookmark.Y, SelectedBookmark.Z);
+            GameManager.PlayerCoordinates = GameManager.SavedPosition = (SelectedBookmark.X, SelectedBookmark.Y, SelectedBookmark.Z);
         }
 
         /// <summary>
@@ -318,6 +318,8 @@ namespace OpenSpaceToolbox
 
             AllBookmarkItems.Add(bookmark);
             BookmarkItems.Add(bookmark);
+
+            GameManager.SavedPosition = coords;
         }
 
         /// <summary>
