@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,6 +9,11 @@ namespace OpenSpaceToolbox
 {
     public class Rayman2GameManager : OpenspaceGameManager
     {
+        /// <summary>
+        /// The name of the game window, used for determining if the game is focused.
+        /// </summary>
+        public string ClassName { get; protected set; }
+
         #region Constructor
 
         public Rayman2GameManager()
@@ -15,6 +22,7 @@ namespace OpenSpaceToolbox
             Name = "Rayman 2: The Great Escape";
             ExecName = "Rayman2";
             WindowName = "Rayman II";
+            ClassName = "Rayman2";
             BookmarkFileName = "Rayman2LevelBookmarks";
 
             //OpenSpace properties
@@ -207,5 +215,19 @@ namespace OpenSpaceToolbox
         }
 
         #endregion
+
+        public override bool IsGameFocused()
+        {
+            const int nChars = 256;
+
+            StringBuilder buff = new StringBuilder(nChars);
+
+            IntPtr handle = Memory.GetForegroundWindow();
+
+            if (Memory.GetClassName(handle, buff, nChars) <= 0)
+                return false;
+
+            return buff.ToString() == ClassName;
+        }
     }
 }

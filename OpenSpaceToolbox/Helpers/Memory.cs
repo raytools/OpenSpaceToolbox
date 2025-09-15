@@ -23,6 +23,9 @@ namespace OpenSpaceToolbox
         [DllImport("user32.dll")]
         public static extern IntPtr GetForegroundWindow();
 
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
+
         [DllImport("user32.dll")]
         public static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
