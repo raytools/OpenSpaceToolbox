@@ -78,6 +78,9 @@ namespace OpenSpaceToolbox
         /// </summary>
         public void LoadSavedPosition()
         {
+            if (GameManager.SavedPosition == default)
+                return;
+
             GameManager.PlayerCoordinates = GameManager.SavedPosition;
         }
 

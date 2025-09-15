@@ -16,8 +16,10 @@ namespace OpenSpaceToolbox
         private void BookmarkListItemDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (DataContext is MainViewModel viewModel)
-                viewModel.GameManager.PlayerCoordinates = (viewModel.BookmarksVm.SelectedBookmark.X,
-                    viewModel.BookmarksVm.SelectedBookmark.Y, viewModel.BookmarksVm.SelectedBookmark.Z);
+                viewModel.GameManager.PlayerCoordinates = viewModel.GameManager.SavedPosition =
+                    (viewModel.BookmarksVm.SelectedBookmark.X,
+                    viewModel.BookmarksVm.SelectedBookmark.Y,
+                    viewModel.BookmarksVm.SelectedBookmark.Z);
         }
 
         private void LevelTreeItemDoubleClick(object sender, MouseButtonEventArgs e)
